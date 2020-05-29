@@ -14,13 +14,15 @@ class CreateProductOptionsTable extends Migration
     public function up()
     {
         Schema::create('product_options', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->timestamps();
 
             $table->float('priceIncrement');
-
+            $table->bigInteger('option_id')->unsigned();
+            $table->bigInteger('option_group_id')->unsigned();
+            $table->bigInteger('product_id')->unsigned();
             $table->foreign('option_id')->references('id')->on('options');
-            $table->foreign('optiongroup_id')->references('id')->on('optiongroups');
+            $table->foreign('option_group_id')->references('id')->on('option_groups');
             $table->foreign('product_id')->references('id')->on('products')
             ->onDelete('cascade')->onUpdate('cascade');
         });

@@ -14,7 +14,7 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->timestamps();
 
             $table->string('SKU');
@@ -30,8 +30,9 @@ class CreateProductsTable extends Migration
             $table->boolean('live');
             $table->boolean('unlimited');
             $table->string('location');
-
-            $table->foreign('gategory_id')->references('id')->on('gategories');
+            
+            $table->bigInteger('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('product_categories');
         });
     }
 

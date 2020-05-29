@@ -14,7 +14,7 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->timestamps();
 
             $table->float('amount');
@@ -32,7 +32,7 @@ class CreateOrdersTable extends Migration
             $table->string('email');
             $table->boolean('shipped');
             $table->string('trackingNumber');
-
+            $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
