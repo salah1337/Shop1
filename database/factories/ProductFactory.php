@@ -16,7 +16,7 @@ $factory->define(Model::class, function (Faker $faker) {
     $categoryName = $category->name;
     $index = rand(0, 2);
 
-    $name = $names[$category->name][$index];
+    $name = $names[$categoryName][$index];
 
     return [
         'SKU' => $name[0].$name[1].'/'.$categoryName[0].$categoryName[1],
