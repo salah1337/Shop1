@@ -2,11 +2,11 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Product;
-use App\ProductCategory;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use Faker\Generator as Faker;
 
-$factory->define(Model::class, function (Faker $faker) {
+$factory->define(Product::class, function (Faker $faker) {
 
     $names['T-shirts'] = ['Jeep', 'Honda', 'Fiat',];
     $names['Cars'] = ['Shirts', 'Hoodies', 'socks',];
@@ -21,17 +21,17 @@ $factory->define(Model::class, function (Faker $faker) {
     return [
         'SKU' => $name[0].$name[1].'/'.$categoryName[0].$categoryName[1],
         'name' => $name,
-        'price' => rand(5, 1000).' dollars',
-        'weight' => rand(5, 5000).' grams',
-        'cartDesc' => $factory->text($maxNbChars = 15),
-        'shortDesc' => $factory->text($maxNbChars = 100),
-        'longDesc' => $factory->text($maxNbChars = 500),
+        'price' => rand(5, 1000),
+        'weight' => rand(5, 5000),
+        'cartDesc' => $faker->text($maxNbChars = 15),
+        'shortDesc' => $faker->text($maxNbChars = 100),
+        'longDesc' => $faker->text($maxNbChars = 500),
         'thumb' => '/'.$category->name.'/'.$name.'Thumb'.'.jpg',
         'image' => '/'.$category->name.'/'.$name.'jpg',
         'stock' => rand(0, 500),
         'live' => $faker->randomElement([true, false]),
         'unlimited' => $faker->randomElement([true, false]),
-        'location' => $factory->streetAddress,
+        'location' => $faker->streetAddress,
         'category_id' => $category->id
     ];
 });
