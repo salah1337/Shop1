@@ -25,7 +25,7 @@ class Order extends Model
         'trackingNumber',
     ];
     function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\User');
     }
     function details(){
         return $this->hasOne('App\Models\OrderDetails');

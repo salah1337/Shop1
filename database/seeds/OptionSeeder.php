@@ -11,6 +11,15 @@ class OptionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(App\Models\Option::class, 9)->create();
+
+        // $options = array (
+        //     array('colors', 'red', 'green', 'blue'),
+        //     array('sizes', 'small', 'medium', 'large'),
+        //     array('models', 'x20', 'x220', 'x420')
+        // );
+
+        // $colors = ['colors', 'red', 'green', 'blue'];
+        // $sizes = ['small', 'medium', 'large'];
     }
 }

@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Option;
-use App\OptionGroup;
+use App\Models\Option;
+use App\Models\OptionGroup;
 use Faker\Generator as Faker;
 
 $factory->define(Option::class, function (Faker $faker) {
@@ -22,10 +22,10 @@ $factory->define(Option::class, function (Faker $faker) {
     
     echo($options[$index1][$index2]);
 
-    $OptionGroup = OptionGroup::where('name', $options[$index1][0]);
+    $OptionGroup = OptionGroup::where('name', $options[$index1][0])->first();
     return [
         //
         'name' => $options[$index1][$index2],
-        'optiongroup_id' => $OptionGroup->id
+        'option_group_id' => $OptionGroup->id
     ];
 });

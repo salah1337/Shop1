@@ -8,8 +8,8 @@ use Faker\Generator as Faker;
 
 $factory->define(Product::class, function (Faker $faker) {
 
-    $names['T-shirts'] = ['Jeep', 'Honda', 'Fiat',];
-    $names['Cars'] = ['Shirts', 'Hoodies', 'socks',];
+    $names['Cars'] = ['Jeep', 'Honda', 'Fiat',];
+    $names['T-shirts'] = ['Shirts', 'Hoodies', 'socks',];
     $names['Laptops'] = ['Accer', 'Lenovo', 'Hp'];
 
     $category = ProductCategory::all()->random();
