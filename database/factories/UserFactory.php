@@ -34,7 +34,7 @@ $factory->define(User::class, function (Faker $faker) {
         'zip' => $faker->postcode,
         'ip' => $faker->ipv4,
         'phone' => $faker->tollFreePhoneNumber,
-        'fax' => $faker->faxNumber,
+        'fax' => $faker->postcode,
         'country' => $faker->country,
         'adress' => $faker->address,
         'adress2' => $faker->address,
