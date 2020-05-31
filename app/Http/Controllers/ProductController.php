@@ -17,6 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
+        return ProductController::all();
     }
 
     /**
@@ -38,7 +39,21 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         
-        return $request->validated();
+        return Product::create([
+            'name' => $request->get('name'), 
+            'location' => $request->get('location'), 
+            'SKU' => $request->get('SKU'), 
+            'price' => $request->get('price'), 
+            'weight' => $request->get('weight'), 
+            'cartDesc' => $request->get('cartDesc'), 
+            'shortDesc' => $request->get('shortDesc'), 
+            'longDesc' => $request->get('longDesc'), 
+            'thumb' => $request->get('thumb'), 
+            'image' => $request->get('image'), 
+            'stock' => $request->get('stock'), 
+            'live' => $request->get('live'), 
+            'unlimited' => $request->get('unlimited'), 
+        ]);
     }
 
     /**

@@ -14,7 +14,7 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        return ProductCategory::all();
+        // return csrf_token();
     }
 
     /**
@@ -25,6 +25,7 @@ class ProductCategoryController extends Controller
     public function create()
     {
         //
+        return "hh";
     }
 
     /**
@@ -35,12 +36,16 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-        return ProductCategory::create([
-            'name' => $request->get('name')
-        ]);
+        if (
+            $request->validate([
+                'name' => 'required|string|max:255',
+            ])
+        ) {
+            return ProductCategory::create([
+                'name' => $request->get('name')
+            ]);
+        }
+        return 'Fail';
     }
 
     /**
@@ -62,7 +67,7 @@ class ProductCategoryController extends Controller
      */
     public function edit(ProductCategory $id)
     {
-        //
+        
     }
 
     /**

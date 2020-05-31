@@ -25,18 +25,18 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            // 'SKU' => 'required|string|max:255',
-            // 'price' => 'required|numeric',
-            // 'weight' => 'required|numeric',
-            // 'cartDesc' => 'required|string|max:255',
-            // 'shortDesc' => 'required|string|max:255',
-            // 'longDesc' => 'required|string',
-            // 'thumb' => 'required|string|max:255',
-            // 'image' => 'required|string|max:255',
-            // 'stock' => 'required|integer',
-            // 'live' => 'required|boolean',
-            // 'unlimited' => 'required|boolean',
-            // 'location ' => 'required|string|max:255',
+            'SKU' => 'required|string|max:255',
+            'price' => 'required|integer',
+            'weight' => 'required|integer',
+            'cartDesc' => 'required|string|max:255',
+            'shortDesc' => 'required|string|max:255',
+            'longDesc' => 'required|string',
+            'thumb' => 'required|string|max:255',
+            'image' => 'required|string|max:255',
+            'stock' => 'required|integer',
+            'live' => 'required|boolean',
+            'unlimited' => 'required|boolean',
+            'location ' => 'required|string|max:255',
         ];
     }
 
