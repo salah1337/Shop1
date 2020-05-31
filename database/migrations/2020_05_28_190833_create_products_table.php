@@ -28,10 +28,10 @@ class CreateProductsTable extends Migration
             $table->text('longDesc');
             $table->string('thumb');
             $table->string('image');
+            $table->string('location');
             $table->float('stock');
             $table->boolean('live');
             $table->boolean('unlimited');
-            $table->string('location');
             
             $table->bigInteger('category_id')->unsigned();
             $table->foreign('category_id')->references('id')->on('product_categories');

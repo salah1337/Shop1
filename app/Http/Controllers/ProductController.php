@@ -52,6 +52,7 @@ class ProductController extends Controller
             'stock' => $request->get('stock'), 
             'live' => $request->get('live'), 
             'unlimited' => $request->get('unlimited'), 
+            'category_id' => $request->get('category_id'), 
         ]);
     }
 
@@ -101,7 +102,8 @@ class ProductController extends Controller
             'image' => $request->get('image'), 
             'stock' => $request->get('stock'), 
             'live' => $request->get('live'), 
-            'unlimited' => $request->get('unlimited'), 
+            'unlimited' => $request->get('unlimited'),
+            'category_id' => $request->get('category_id'), 
         ]);
     }
 

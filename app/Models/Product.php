@@ -22,7 +22,7 @@ class Product extends Model
         'stock',
         'live',
         'unlimited',
-        'location ',
+        'location',
         'category_id'
     ];
     function options(){

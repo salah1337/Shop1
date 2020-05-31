@@ -33,10 +33,11 @@ class StoreProductRequest extends FormRequest
             'longDesc' => 'required|string',
             'thumb' => 'required|string|max:255',
             'image' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
             'stock' => 'required|integer',
             'live' => 'required|boolean',
             'unlimited' => 'required|boolean',
-            'location ' => 'required|string|max:255',
+            'category_id' => 'required|integer',
         ];
     }
 

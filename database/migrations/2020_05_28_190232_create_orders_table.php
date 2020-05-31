@@ -17,6 +17,8 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
 
+            $table->softDeletes();
+
             $table->float('amount');
             $table->string('shipName');
             $table->string('shipAddress');

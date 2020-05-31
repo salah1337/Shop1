@@ -17,6 +17,8 @@ class CreateOptionsTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
 
+            $table->softDeletes();
+
             $table->string('name');
             $table->bigInteger('option_group_id')->unsigned();
             $table->foreign('option_group_id')->references('id')->on('option_groups');

@@ -75,12 +75,11 @@ class OptionGroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
         $optionGroup = OptionGroup::find($id);
-
+        if ( !$optionGroup ) return 'Not Found';
         return $optionGroup->update([
             'name' => $request->get('name')
         ]);
@@ -96,7 +95,7 @@ class OptionGroupController extends Controller
     {
         $optionGroup = OptionGroup::find($id);
         if(!$optionGroup){
-            return 'Option Group doesn\'t exist';
+            return 'Not Found';
         }
         return $optionGroup->delete();
     }

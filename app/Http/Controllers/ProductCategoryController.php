@@ -25,7 +25,6 @@ class ProductCategoryController extends Controller
     public function create()
     {
         //
-        return "hh";
     }
 
     /**
