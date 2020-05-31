@@ -14,7 +14,7 @@ class OptionGroupController extends Controller
      */
     public function index()
     {
-        //
+        return OptionGroup::all();
     }
 
     /**
@@ -36,6 +36,12 @@ class OptionGroupController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        return OptionGroup::create([
+            'name' => $request->get('name')
+        ]);
     }
 
     /**
@@ -44,9 +50,9 @@ class OptionGroupController extends Controller
      * @param  \App\Models\OptionGroup  $optionGroup
      * @return \Illuminate\Http\Response
      */
-    public function show(OptionGroup $optionGroup)
+    public function show($id)
     {
-        //
+        return  OptionGroup::find($id) ?? 'Not found';
     }
 
     /**
@@ -67,9 +73,17 @@ class OptionGroupController extends Controller
      * @param  \App\Models\OptionGroup  $optionGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OptionGroup $optionGroup)
+    public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        $optionGroup = OptionGroup::find($id);
+
+        return $optionGroup->update([
+            'name' => $request->get('name')
+        ]);
     }
 
     /**
@@ -78,8 +92,12 @@ class OptionGroupController extends Controller
      * @param  \App\Models\OptionGroup  $optionGroup
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OptionGroup $optionGroup)
+    public function destroy($id)
     {
-        //
+        $optionGroup = OptionGroup::find($id);
+        if(!$optionGroup){
+            return 'Option Group doesn\'t exist';
+        }
+        return $optionGroup->delete();
     }
 }

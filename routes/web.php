@@ -24,5 +24,15 @@ Route::prefix('/option')->group( function(){
     Route::get('/', 'OptionController@index');
     Route::post('/add', 'OptionController@store');
     Route::get('/show/{id}', 'OptionController@show');
+    Route::post('/update/{id}', 'OptionController@update');
     Route::get('/delete/{id}', 'OptionController@destroy');
+});
+
+
+Route::prefix('/optiongroup')->group( function(){
+    Route::get('/', 'OptionGroupController@index');
+    Route::post('/add', 'OptionGroupController@store');
+    Route::get('/show/{id}', 'OptionGroupController@show');
+    Route::post('/update/{id}', 'OptionGroupController@update');
+    Route::get('/delete/{id}', 'OptionGroupController@destroy');
 });
