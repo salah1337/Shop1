@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductOption;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreProductOptionRequest;
 
 class ProductOptionController extends Controller
 {
@@ -14,7 +15,7 @@ class ProductOptionController extends Controller
      */
     public function index()
     {
-        //
+        return ProductOption::all();
     }
 
     /**
@@ -33,9 +34,14 @@ class ProductOptionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductOptionRequest $request)
     {
-        //
+        return ProductOption::create([
+            'priceIncrement' => $request->get('priceIncrement'),
+            'option_id' => $request->get('option_id'),
+            'option_group_id' => $request->get('option_group_id'),
+            'product_id' => $request->get('product_id'),
+        ]);
     }
 
     /**
@@ -44,9 +50,9 @@ class ProductOptionController extends Controller
      * @param  \App\Models\ProductOption  $productOption
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductOption $productOption)
+    public function show($id)
     {
-        //
+        return ProductOption::find($id);
     }
 
     /**
@@ -69,7 +75,15 @@ class ProductOptionController extends Controller
      */
     public function update(Request $request, ProductOption $productOption)
     {
-        //
+        $option = ProductOption::find($id);
+        if ( !$option ) return 'Not Found';
+
+        return $option->update([
+            'priceIncrement' => $request->get('priceIncrement'),
+            'option_id' => $request->get('option_id'),
+            'option_group_id' => $request->get('option_group_id'),
+            'product_id' => $request->get('product_id'),
+        ]);
     }
 
     /**
@@ -80,6 +94,9 @@ class ProductOptionController extends Controller
      */
     public function destroy(ProductOption $productOption)
     {
-        //
+        $option = ProductOption::find($id);
+        if ( !$option ) return 'Not Found';
+
+        $option->delete();
     }
 }
