@@ -26,13 +26,22 @@ Route::prefix('/option')->group( function(){
     Route::get('/show/{id}', 'OptionController@show');
     Route::post('/update/{id}', 'OptionController@update');
     Route::get('/delete/{id}', 'OptionController@destroy');
+
+    Route::prefix('/group')->group( function(){
+        Route::get('/', 'OptionGroupController@index');
+        Route::post('/add', 'OptionGroupController@store');
+        Route::get('/show/{id}', 'OptionGroupController@show');
+        Route::post('/update/{id}', 'OptionGroupController@update');
+        Route::get('/delete/{id}', 'OptionGroupController@destroy');
+    });
 });
 
-
-Route::prefix('/optiongroup')->group( function(){
-    Route::get('/', 'OptionGroupController@index');
-    Route::post('/add', 'OptionGroupController@store');
-    Route::get('/show/{id}', 'OptionGroupController@show');
-    Route::post('/update/{id}', 'OptionGroupController@update');
-    Route::get('/delete/{id}', 'OptionGroupController@destroy');
+Route::prefix('/product')->group( function(){
+    Route::prefix('/category')->group( function(){
+        Route::get('/', 'OptionGroupController@index');
+        Route::post('/add', 'OptionGroupController@store');
+        Route::get('/show/{id}', 'OptionGroupController@show');
+        Route::post('/update/{id}', 'OptionGroupController@update');
+        Route::get('/delete/{id}', 'OptionGroupController@destroy');
+    });
 });
