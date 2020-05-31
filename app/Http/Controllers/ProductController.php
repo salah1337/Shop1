@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return ProductController::all();
+        return Product::all();
     }
 
     /**
@@ -38,7 +38,6 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        
         return Product::create([
             'name' => $request->get('name'), 
             'location' => $request->get('location'), 
@@ -62,9 +61,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        
+        return Product::find($id) ?? 'Not Found';
     }
 
     /**
@@ -85,9 +84,25 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(StoreProductRequest $request, $id)
     {
-        //
+        $product = Product::find($id);
+        if ( !$product ) return 'Not Found';
+        return $product->update([
+            'name' => $request->get('name'), 
+            'location' => $request->get('location'), 
+            'SKU' => $request->get('SKU'), 
+            'price' => $request->get('price'), 
+            'weight' => $request->get('weight'), 
+            'cartDesc' => $request->get('cartDesc'), 
+            'shortDesc' => $request->get('shortDesc'), 
+            'longDesc' => $request->get('longDesc'), 
+            'thumb' => $request->get('thumb'), 
+            'image' => $request->get('image'), 
+            'stock' => $request->get('stock'), 
+            'live' => $request->get('live'), 
+            'unlimited' => $request->get('unlimited'), 
+        ]);
     }
 
     /**
@@ -96,8 +111,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        if ( !$product ) return 'Not Found';
+        return $product->delete();
     }
 }

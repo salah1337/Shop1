@@ -34,14 +34,15 @@ Route::prefix('/option')->group( function(){
 });
 
 Route::prefix('/product')->group( function(){
-    Route::get('/add', 'ProductController@store');
+    Route::get('/', 'ProductController@index');
+    Route::post('/add', 'ProductController@store');
     Route::get('/show/{id}', 'ProductController@show');
     Route::post('/update/{id}', 'ProductController@update');
     Route::get('/delete/{id}', 'ProductController@destroy');
 
     Route::prefix('/category')->group( function(){
         Route::get('/', 'ProductCategoryController@index');
-        Route::get('/add', 'ProductCategoryController@store');
+        Route::post('/add', 'ProductCategoryController@store');
         Route::get('/show/{id}', 'ProductCategoryController@show');
         Route::post('/update/{id}', 'ProductCategoryController@update');
         Route::get('/delete/{id}', 'ProductCategoryController@destroy');

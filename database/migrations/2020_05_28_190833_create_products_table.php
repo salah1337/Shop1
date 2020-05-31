@@ -17,6 +17,8 @@ class CreateProductsTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
 
+            $table->softDeletes();
+
             $table->string('SKU');
             $table->string('name');
             $table->float('price');
