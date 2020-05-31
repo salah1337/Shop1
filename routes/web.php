@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('/products/store', 'ProductController@store');
+Route::get('/products', 'ProductController@index');
+
+
+Route::prefix('/option')->group( function(){
+    Route::get('/', 'OptionController@index');
+    Route::post('/add', 'OptionController@store');
+    Route::get('/show/{id}', 'OptionController@show');
+    Route::get('/delete/{id}', 'OptionController@destroy');
+});

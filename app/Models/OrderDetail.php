@@ -8,7 +8,7 @@ class OrderDetail extends Model
 {
     //
     protected $fillable = [
-        'name', 'price', 'SKU', 'quantity'
+        'name', 'price', 'SKU', 'quantity', 'product_id', 'order_id'
     ];
     public function order(){
         return $this->belongsTo('App\Models\Order');

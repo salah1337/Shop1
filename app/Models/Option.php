@@ -8,7 +8,7 @@ class Option extends Model
 {
     //
     protected $fillable = [
-        'name'
+        'name', 'option_group_id'
     ];
     function optionGroup(){
         return $this->belongsTo('App\Models\OptionGroup');

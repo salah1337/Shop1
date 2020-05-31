@@ -8,7 +8,7 @@ class ProductOption extends Model
 {
     //
     protected $fillable = [
-        'priceIncrement'
+        'priceIncrement', 'option_id', 'option_group_id', 'product_id'
     ];
     function product(){
         return $this->belongsTo('App\Models\Product');
