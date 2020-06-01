@@ -19,9 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', 'AuthController@login');
+Route::post('/register', 'AuthController@register');
+Route::get('/logout', 'AuthController@logout')->middleware('auth:api');
 
 Route::prefix('/option')->group( function(){
-    Route::get('/', 'OptionController@index');
+    Route::get('/', 'OptionController@index')->middleware('auth:api');
     Route::post('/add', 'OptionController@store');
     Route::get('/show/{id}', 'OptionController@show');
     Route::post('/update/{id}', 'OptionController@update');
