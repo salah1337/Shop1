@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Http\Requests\StoreUserRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -33,9 +35,25 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        return User::create([
+            'username' => $request->get('username'),
+            'email' => $request->get('email'),
+            'firstName' => $request->get('firstName'),
+            'lastName' => $request->get('lastName'),
+            'password' => Hash::make($request->get('password')),
+            'title' => $request->get('title'),
+            'gender' => $request->get('gender'),
+            'city' => $request->get('city'),
+            'state' => $request->get('state'),
+            'zip' => $request->get('zip'),
+            'phone' => $request->get('phone'),
+            'fax' => $request->get('fax'),
+            'country' => $request->get('country'),
+            'adress' => $request->get('adress'),
+            'adress2' => $request->get('adress2'),
+        ]);
     }
 
     /**
@@ -67,9 +85,27 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreUserRequest $request, $id)
     {
-        //
+        $user = User::find($id);
+        if ( !$user ) return 'Not Found';
+        return $user->update([
+            'username' => $request->get('username'),
+            'email' => $request->get('email'),
+            'firstName' => $request->get('firstName'),
+            'lastName' => $request->get('lastName'),
+            'password' => Hash::make($request->get('password')),
+            'title' => $request->get('title'),
+            'gender' => $request->get('gender'),
+            'city' => $request->get('city'),
+            'state' => $request->get('state'),
+            'zip' => $request->get('zip'),
+            'phone' => $request->get('phone'),
+            'fax' => $request->get('fax'),
+            'country' => $request->get('country'),
+            'adress' => $request->get('adress'),
+            'adress2' => $request->get('adress2'),
+        ]);
     }
 
     /**
