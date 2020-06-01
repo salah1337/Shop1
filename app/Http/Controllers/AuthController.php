@@ -38,8 +38,8 @@ class AuthController extends Controller
             $request = $request->withParsedBody($request->getParsedBody() +
             [
                 'grant_type' => 'password',
-                'client_id' => 2, //client id
-                'client_secret' => 'kUyV2ehM86gvSHN5OqkIQcUV6M8gjn3TtyfUFHUS', //client secret
+                'client_id' => config('services.passport.client_id'), //client id
+                'client_secret' => config('services.passport.client_secret'), //client secret
             ]);
     
     
