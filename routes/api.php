@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/login', 'AuthController@login');
+
 Route::prefix('/option')->group( function(){
     Route::get('/', 'OptionController@index');
     Route::post('/add', 'OptionController@store');
@@ -46,6 +49,14 @@ Route::prefix('/product')->group( function(){
         Route::get('/show/{id}', 'ProductCategoryController@show');
         Route::post('/update/{id}', 'ProductCategoryController@update');
         Route::get('/delete/{id}', 'ProductCategoryController@destroy');
+    });
+    
+    Route::prefix('/option')->group( function(){
+        Route::get('/', 'ProductOptionController@index');
+        Route::post('/add', 'ProductOptionController@store');
+        Route::get('/show/{id}', 'ProductOptionController@show');
+        Route::post('/update/{id}', 'ProductOptionController@update');
+        Route::get('/delete/{id}', 'ProductOptionController@destroy');
     });
 });
 

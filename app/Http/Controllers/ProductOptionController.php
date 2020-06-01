@@ -73,7 +73,7 @@ class ProductOptionController extends Controller
      * @param  \App\Models\ProductOption  $productOption
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductOption $productOption)
+    public function update(StoreProductOptionRequest $request, $id)
     {
         $option = ProductOption::find($id);
         if ( !$option ) return 'Not Found';
@@ -92,7 +92,7 @@ class ProductOptionController extends Controller
      * @param  \App\Models\ProductOption  $productOption
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductOption $productOption)
+    public function destroy($id)
     {
         $option = ProductOption::find($id);
         if ( !$option ) return 'Not Found';
