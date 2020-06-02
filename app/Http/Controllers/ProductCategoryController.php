@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\StoreProductCategoryRequest;
 class ProductCategoryController extends Controller
 {
     /**
@@ -34,18 +34,11 @@ class ProductCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductCategoryRequest $request)
     {
-        if (
-            $request->validate([
-                'name' => 'required|string|max:255',
-            ])
-        ) {
             return ProductCategory::create([
                 'name' => $request->get('name')
             ]);
-        }
-        return 'Fail';
     }
 
     /**
@@ -77,12 +70,8 @@ class ProductCategoryController extends Controller
      * @param  \App\Models\ProductCategory  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductCategory $id)
+    public function update(StoreProductCategoryRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            ]);
-
         $productCategory = ProductCategory::find($id);
         if (!$productCategory ) return 'Not Found';
         return $productCategory->update([

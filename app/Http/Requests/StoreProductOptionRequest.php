@@ -13,7 +13,7 @@ class StoreProductOptionRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->ableTo('store-productOption') || $this->user()->isA('admin');
     }
 
     /**

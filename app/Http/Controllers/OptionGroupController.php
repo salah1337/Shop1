@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OptionGroup;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreOptionGroupRequest;
 
 class OptionGroupController extends Controller
 {
@@ -33,12 +34,8 @@ class OptionGroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOptionGroupRequest $request)
     {
-        //
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
         return OptionGroup::create([
             'name' => $request->get('name')
         ]);
@@ -73,11 +70,8 @@ class OptionGroupController extends Controller
      * @param  \App\Models\OptionGroup  $optionGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreOptionRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
         $optionGroup = OptionGroup::find($id);
         if ( !$optionGroup ) return 'Not Found';
         return $optionGroup->update([

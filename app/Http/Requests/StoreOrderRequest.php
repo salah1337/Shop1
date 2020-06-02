@@ -13,7 +13,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->ableTo('store-order') || $this->user()->isA('admin');
     }
 
     /**

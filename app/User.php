@@ -73,8 +73,23 @@ class User extends Authenticatable
         $this->roles()->sync($role, false);
     }
     
+    public function revokeRole($role){
+        if(is_string($role)){
+            $role =  Role::whereName($role)->firstOrFail();
+        }
+        $this->roles()->detach($role);
+    }
+    
+    public function isA($role){
+        return $this->roles()->where('name', $role)->first();
+    }
+
     public function abilities(){
         return $this->roles->map->abilities->flatten()->pluck('name')->unique();
+    }
+
+    public function ableTo($ability){
+        return $this->roles->map->abilities->flatten()->where('name', $ability)->first();
     }
 
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Option;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreOptionRequest;
 
 class OptionController extends Controller
 {
@@ -24,12 +25,6 @@ class OptionController extends Controller
      */
     public function create()
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-        return Option::create([
-            'name' => $request->get('name')
-        ]);
     }
 
     /**
@@ -38,13 +33,8 @@ class OptionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOptionRequest $request)
     {
-        //
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'option_group_id' => 'required|integer'
-        ]);
         return Option::create([
             'name' => $request->get('name'),
             'option_group_id' => $request->get('option_group_id')
@@ -80,12 +70,8 @@ class OptionController extends Controller
      * @param  \App\Models\Option  $option
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreOptionRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'option_group_id' => 'required|integer'
-        ]);
         $option = Option::find($id);
 
         return $option->update([

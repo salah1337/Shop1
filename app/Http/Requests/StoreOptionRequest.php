@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOrderDetailsRequest extends FormRequest
+class StoreOptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreOrderDetailsRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->ableTo('store-orderDetail') || $this->user()->isA('admin');
+        return $this->user()->ableTo('store-option') || $this->user()->isA('admin');
     }
 
     /**
@@ -25,11 +25,7 @@ class StoreOrderDetailsRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'SKU' => 'required|string|max:255',
-            'price' => 'required|integer',
-            'quantity' => 'required|integer',
-            'product_id' => 'required|string|max:255',
-            'order_id' => 'required|string|max:255',
+            'option_group_id' => 'required|integer'
         ];
     }
 }
