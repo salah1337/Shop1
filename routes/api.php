@@ -22,13 +22,7 @@ Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
 Route::get('/logout', 'AuthController@logout')->middleware('auth:api');
 
-// Route::prefix('/user')->group( function(){
-//     Route::get('/', 'UserController@index');
-//     Route::post('/add', 'UserController@store');
-//     Route::get('/show/{id}', 'UserController@show');
-//     Route::post('/update/{id}', 'UserController@update');
-//     Route::get('/delete/{id}', 'UserController@destroy');
-// });
+
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::prefix('/user')->group( function(){

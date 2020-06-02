@@ -57,7 +57,24 @@ class User extends Authenticatable
     public function orders(){
         return $this->hasMany('App\Models\Order');
     }
+
     public function token(){
         return $this->hasMany('\App\OauthAccessToken');
     }
+
+    public function roles(){
+        return $this->belongsToMany('App\Role');
+    }
+
+    public function assignRole($role){
+        if(is_string($role)){
+            $role =  Role::whereName($role)->firstOrFail();
+        }
+        $this->roles()->sync($role, false);
+    }
+    
+    public function abilities(){
+        return $this->roles->map->abilities->flatten()->pluck('name')->unique();
+    }
+
 }
