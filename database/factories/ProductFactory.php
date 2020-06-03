@@ -32,6 +32,6 @@ $factory->define(Product::class, function (Faker $faker) {
         'live' => $faker->randomElement([true, false]),
         'unlimited' => $faker->randomElement([true, false]),
         'location' => $faker->streetAddress,
-        'category_id' => $category->id
+        'product_category_id' => $category->id
     ];
 });

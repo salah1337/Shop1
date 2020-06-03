@@ -21,9 +21,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
 Route::get('/logout', 'AuthController@logout')->middleware('auth:api');
-
-
 Route::post('user/add', 'UserController@store');
+
+
+Route::prefix('/customer')->group(function(){
+    Route::get('/products', 'ClientController@productsAll');
+    Route::get('/product/{id}', 'ClientController@productsOne');
+    Route::post('/products/{category}', 'ClientController@productsFilter')->middleware('auth:api');
+    
+
+    Route::group(['middleware' => 'auth:api'], function(){
+        
+        Route::post('/order', 'ClientController@orderPlace');
+        Route::get('/orders', 'ClientController@ordersAll');
+        Route::get('/order/{id}', 'ClientController@orderShow');
+    });
+
+});
+
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::prefix('/user')->group( function(){
@@ -87,6 +102,17 @@ Route::group(['middleware' => 'auth:api'], function() {
             Route::post('/update/{id}', 'OrderDetailController@update'); // admin manager owner
             Route::get('/delete/{id}', 'OrderDetailController@destroy'); // admin manager owner
         });
+    });
+
+    Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function(){
+        Route::prefix('/staff')->group( function(){
+            Route::get('/', 'StaffController@all');
+            Route::post('/add', 'StaffController@store');
+            Route::get('/show/{id}', 'StaffController@show');
+            Route::post('/update/{id}', 'StaffController@update');
+            Route::get('/delete/{id}', 'StaffController@destroy');
+        });
+
     });
 });
 

@@ -33,8 +33,8 @@ class CreateProductsTable extends Migration
             $table->boolean('live');
             $table->boolean('unlimited');
             
-            $table->bigInteger('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('product_categories');
+            $table->bigInteger('product_category_id')->unsigned();
+            $table->foreign('product_category_id')->references('id')->on('product_categories');
         });
     }
 
