@@ -81,7 +81,7 @@ class User extends Authenticatable
     }
     
     public function isA($role){
-        return $this->roles()->where('name', $role)->first();
+        return $this->roles()->where('name', $role)->first() ? true : false;
     }
 
     public function abilities(){

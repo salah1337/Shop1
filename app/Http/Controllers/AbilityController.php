@@ -1,46 +1,47 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Ability;
 use Illuminate\Http\Request;
-use App\Role;
 
-class RolesController extends Controller
+class AbilityController extends Controller
 {
     public function store(Request $request){
-        $role = Role::create([
+        $ability = Ability::create([
             'name' => $request->get('name'),
             'label' => $request->get('label') ?? \ucfirst($request->get('name'))
         ]);
         $data = [
             'success' => true,
-            'role' => $role,
+            'ability' => $ability,
         ];
         return \response()->json($data, 201);
     }
   
     public function update(Request $request, $id){
-        $role = Role::find($id);
-        if (!$role) return \response()->json(['error' => 'Not found', 404]);
-        $role->update([
+        $ability = Ability::find($id);
+        if (!$ability) return \response()->json(['error' => 'Not found', 404]);
+        $ability->update([
             'name' => $request->get('name'),
             'label' => $request->get('label') ?? \ucfirst($request->get('name'))
         ]);
         $data = [
             'success' => true,
-            'role' => $role,
+            'ability' => $ability,
         ];
         return \response()->json($data, 201);
     }
 
     public function destroy($id){
-        $role = Role::find($id);
-        if (!$role) return \response()->json(['error' => 'Not found', 404]);
-        $role->delete();
+        $ability = Ability::find($id);
+        if (!$ability) return \response()->json(['error' => 'Not found', 404]);
+        $ability->delete();
         $data = [
             'success' => true, 
-            'message' => 'Role deleted successfully'
+            'message' => 'Deleted successfully'
         ];
         return \response()->json($data, 201);
     }
+
+
 }

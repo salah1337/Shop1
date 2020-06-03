@@ -107,10 +107,18 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function(){
         Route::prefix('/staff')->group( function(){
             Route::get('/', 'StaffController@all');
-            Route::post('/add', 'StaffController@store');
+            Route::post('/assign', 'StaffController@assign');
             Route::get('/show/{id}', 'StaffController@show');
-            Route::post('/update/{id}', 'StaffController@update');
-            Route::get('/delete/{id}', 'StaffController@destroy');
+            Route::post('/revoke', 'StaffController@revoke');
+        });
+        
+        Route::prefix('/roles')->group( function(){
+            //create role
+            //update role
+            //delete role
+            //get role users
+            //add ability to role
+            //revoke ability from role
         });
 
     });
