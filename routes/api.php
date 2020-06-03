@@ -21,29 +21,27 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
 Route::get('/logout', 'AuthController@logout')->middleware('auth:api');
-Route::post('user/add', 'UserController@store');
 
 
 Route::prefix('/customer')->group(function(){
     Route::get('/products', 'ClientController@productsAll');
     Route::get('/product/{id}', 'ClientController@productsOne');
     Route::post('/products/{category}', 'ClientController@productsFilter')->middleware('auth:api');
-    
-
     Route::group(['middleware' => 'auth:api'], function(){
-        
         Route::post('/order', 'ClientController@orderPlace');
         Route::get('/orders', 'ClientController@ordersAll');
         Route::get('/order/{id}', 'ClientController@orderShow');
+        Route::get('/order/cancel/{id}', 'ClientController@orderCancel');
     });
 
 });
 
 
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => ['auth:api', 'staff']], function() {
     Route::prefix('/user')->group( function(){
         Route::get('/', 'UserController@index'); //admin manager
-        Route::post('/show/{id}', 'UserController@show'); // admin manager owner 
+        Route::post('/add', 'UserController@store'); //admin manager
+        Route::get('/show/{id}', 'UserController@show'); // admin manager owner 
         Route::post('/update/{id}', 'UserController@update'); // admin manager owner
         Route::get('/delete/{id}', 'UserController@destroy'); // admin manager owner
     });

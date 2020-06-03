@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Order;
+use App\Models\Order;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -18,7 +18,6 @@ class OrderPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
     }
 
     /**
@@ -30,8 +29,7 @@ class OrderPolicy
      */
     public function view(User $user, Order $order)
     {
-        dd($order);
-        return true;
+        return $order->user->id === $user->id ? true : false;
     }
 
     /**
@@ -54,7 +52,7 @@ class OrderPolicy
      */
     public function update(User $user, Order $order)
     {
-        //
+        return $order->user->id === $user->id ? true : false;
     }
 
     /**
@@ -64,9 +62,9 @@ class OrderPolicy
      * @param  \App\Order  $order
      * @return mixed
      */
-    public function delete(User $user, Order $order)
+    public function cancel(User $user, Order $order)
     {
-        //
+        return $order->user->id === $user->id ? true : false;
     }
 
     /**

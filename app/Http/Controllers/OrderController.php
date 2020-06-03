@@ -52,7 +52,7 @@ class OrderController extends Controller
             'email' => $request->get('email'),
             'shipped' => $request->get('shipped'),
             'trackingNumber' => $request->get('trackingNumber'),
-            'user_id' => $request->user()->id,
+            'user_id' => $request->get('user_id'),
         ]);
     }
 

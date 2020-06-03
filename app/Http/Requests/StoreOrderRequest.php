@@ -13,7 +13,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->ableTo('store-order') || $this->user()->isA('admin');
     }
 
     /**
@@ -39,6 +39,7 @@ class StoreOrderRequest extends FormRequest
             'email' => 'required|string|max:255',
             'shipped' => 'required|boolean',
             'trackingNumber' => 'required|integer',
+            'user_id' => 'required|integer',
         ];
     }
 }

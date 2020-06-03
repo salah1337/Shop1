@@ -77,10 +77,28 @@ class ClientController extends Controller
 
     public function orderShow(Request $request, $id){
         $order = Order::find($id);
-        if (!$order->user === $request->user()) return \response()->json(403);
+        if (!$order){ 
+            $data = [
+                'success' => false,
+                'error' => 'Order not found.'
+            ];
+            return \response()->json($data,404);
+        }
+        $this->authorize('view', $order);
         $data = [
             'success' => true,
             'order' => $order
+        ];
+        return \response()->json($data, 200);
+    }
+
+    public function ordercancel(Request $request, $id){
+        $order = Order::find($id);
+        if (!$order->user === $request->user()) return \response()->json(403);
+        $order->delete();
+        $data = [
+            'success' => true,
+            'message' => 'Order canceled successfully'
         ];
         return \response()->json($data, 200);
     }
