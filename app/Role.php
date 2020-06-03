@@ -21,6 +21,10 @@ class Role extends Model
         return $this->belongsToMany('App\User');
     }
 
+    public function ableTo($ability){
+        return $this->abilities->where('name',$ability)->first() ? true : false;
+    }
+
     public function allowTo($ability){
         if(is_string($ability)){
             $ability =  Ability::whereName($ability)->firstOrFail();

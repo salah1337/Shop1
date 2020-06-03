@@ -13,7 +13,7 @@ class StaffController extends Controller
     {
         $roles = Role::all();
         foreach ($roles as $role) {
-            $data[$role->name] = $role->users->pluck('username');
+            $data[$role->name] = $role->users->pluck('username', 'id');
         }
         return \response()->json($data, 200);
     }
@@ -46,7 +46,7 @@ class StaffController extends Controller
         return \response()->json($data, 404);
     }
 
-    
+
     public function revoke(Request $request)
     {
         $user = User::where('username', $request->get('username'))->first();

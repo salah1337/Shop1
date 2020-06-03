@@ -113,12 +113,13 @@ Route::group(['middleware' => 'auth:api'], function() {
         });
         
         Route::prefix('/roles')->group( function(){
-            //create role
-            //update role
-            //delete role
-            //get role users
-            //add ability to role
-            //revoke ability from role
+            Route::get('/', 'RolesController@all');
+            Route::get('/show/{id}', 'RolesController@show');
+            Route::post('/add', 'RolesController@store');
+            Route::post('/update/{id}', 'RolesController@update');
+            Route::get('/delete/{id}', 'RolesController@destroy');
+            Route::post('/allow', 'RolesController@allowTo');
+            Route::post('/unallow', 'RolesController@unAllow');
         });
 
     });
