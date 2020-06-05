@@ -10,7 +10,7 @@ class OptionGroup extends Model
     protected $fillable = [
         'name'
     ];
-    function productOptions(){
+    function options(){
         return $this->hasMany('App\Models\Option');
     }
 }

@@ -15,7 +15,15 @@ class OptionGroupController extends Controller
      */
     public function index()
     {
-        return OptionGroup::all();
+        $optionGroups = OptionGroup::all();
+        $data = [
+            'success' => true, 
+            'data' => [
+                'count' => $optionGroups->count(),
+                'optionGroups' => $optionGroups
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -36,9 +44,16 @@ class OptionGroupController extends Controller
      */
     public function store(StoreOptionGroupRequest $request)
     {
-        return OptionGroup::create([
+        $optionGroup = OptionGroup::create([
             'name' => $request->get('name')
         ]);
+        $data = [
+            'success' => true, 
+            'data' => [
+                'optionGroup' => $optionGroup
+            ]
+        ];
+        return \response()->json($data, 201);
     }
 
     /**
@@ -49,7 +64,25 @@ class OptionGroupController extends Controller
      */
     public function show($id)
     {
-        return  OptionGroup::find($id) ?? 'Not found';
+        $optionGroup = OptionGroup::find($id);
+        if( !$optionGroup ){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Option group not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $data = [
+            'success' => true,
+            'data' => [
+                'optionGroup' => $optionGroup,
+                'optionsCount' => $optionGroup->options->count(),
+                'options' => $optionGroup->options
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -70,13 +103,28 @@ class OptionGroupController extends Controller
      * @param  \App\Models\OptionGroup  $optionGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreOptionRequest $request, $id)
+    public function update(StoreOptionGroupRequest $request, $id)
     {
         $optionGroup = OptionGroup::find($id);
-        if ( !$optionGroup ) return 'Not Found';
-        return $optionGroup->update([
+        if( !$optionGroup ){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Option group not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $optionGroup->update([
             'name' => $request->get('name')
         ]);
+        $data = [
+            'success' => true,
+            'data' => [
+                'optionGroup' => $optionGroup
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -88,9 +136,32 @@ class OptionGroupController extends Controller
     public function destroy($id)
     {
         $optionGroup = OptionGroup::find($id);
-        if(!$optionGroup){
-            return 'Not Found';
+        if( !$optionGroup ){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Option group not found'
+                ]
+            ];
+            return \response()->json($data, 404);
         }
-        return $optionGroup->delete();
+        if ($optionGroup->options->count() > 0) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Can not delete option group that is not empty'
+                ]
+            ];
+            return \response()->json($data, 500);
+        }
+        $optionGroup->delete();
+        $data = [
+            'success' => true,
+            'data' => [
+                'message' => 'Option group has been deleted',
+                'optionGroup' => $optionGroup
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 }
