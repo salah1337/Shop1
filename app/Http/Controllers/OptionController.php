@@ -8,25 +8,18 @@ use App\Http\Requests\StoreOptionRequest;
 
 class OptionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return Option::all();
+        $options = Option::all();
+        $data = [
+            'success' => true, 
+            'data' => [
+                'count' => $options->count(),
+                'options' => $options
+            ]
+        ];
+        return \response()->json($data, 200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,10 +28,17 @@ class OptionController extends Controller
      */
     public function store(StoreOptionRequest $request)
     {
-        return Option::create([
+        $option = Option::create([
             'name' => $request->get('name'),
             'option_group_id' => $request->get('option_group_id')
         ]);
+        $data = [
+            'success' => true,
+            'data' => [
+                'option' => $option
+            ]
+        ];
+        return \response()->json($data, 201);
     }
 
     /**
@@ -49,7 +49,23 @@ class OptionController extends Controller
      */
     public function show($id)
     {
-        return Option::find($id) ?? 'Not found';
+        $option = Option::find($id);
+        if ( !$option ){
+            $data = [
+                'success' => false, 
+                'data' => [
+                    'message' => 'Option not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $data = [
+            'success' => true, 
+            'data' => [
+                'option' => $option
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -73,11 +89,27 @@ class OptionController extends Controller
     public function update(StoreOptionRequest $request, $id)
     {
         $option = Option::find($id);
-
-        return $option->update([
+        if ( !$option ){
+            $data = [
+                'success' => false, 
+                'data' => [
+                    'message' => 'Option not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $option->update([
             'name' => $request->get('name'),
             'option_group_id' => $request->get('option_group_id')
         ]);
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'Option has been updated',
+                'option' => $option
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -89,9 +121,23 @@ class OptionController extends Controller
     public function destroy($id)
     {
         $option = Option::find($id);
-        if(!$option){
-            return 'Option doesn\'t exist';
+        if ( !$option ){
+            $data = [
+                'success' => false, 
+                'data' => [
+                    'message' => 'Option not found'
+                ]
+            ];
+            return \response()->json($data, 404);
         }
-        return $option->delete();
+        $option->delete();
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'Option has been deleted',
+                'option' => $option
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 }
