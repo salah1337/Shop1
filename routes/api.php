@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/login', 'AuthController@login');
+Route::get('/abilities', 'AbilityController@all');
 // Route::get('/user', 'AuthController@user')->middleware('auth:api');
 Route::post('/register', 'AuthController@register');
 Route::post('/logout', 'AuthController@logout')->middleware('auth:api');
@@ -27,7 +28,7 @@ Route::post('/logout', 'AuthController@logout')->middleware('auth:api');
 Route::prefix('/customer')->group(function(){
     Route::get('/products', 'ClientController@productsAll');
     Route::get('/product/{id}', 'ClientController@productsOne');
-    Route::post('/products/{category}', 'ClientController@productsFilter')->middleware('auth:api');
+    Route::post('/products/{category}', 'ClientController@productsFilter');
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('/user', 'AuthController@user');
         Route::post('/order', 'ClientController@orderPlace');

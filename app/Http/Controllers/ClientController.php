@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Order;
-use App\Models\User;
+use App\User;
 use App\Http\Requests\StoreOrderRequest;
 
 class ClientController extends Controller
@@ -15,27 +15,53 @@ class ClientController extends Controller
     public function productsAll(){
         $products = Product::all()->where('live', 1);
         $data = [
-            'count' => $products->count(),
-            'products' => $products
+            'success' => true,
+            'data' => [
+                'count' => $products->count(),
+                'products' => $products
+            ]
         ];
         return \response()->json($data, 200);
     }
     
     public function productsOne($id){
         $product = Product::find($id);
-        if( !$product->live ){
-            return \response()->json(['error' => 'Not found.'],404);
+        if( !$product || !$product->live ){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Product not found.'
+                ]
+            ];
+            return \response()->json($data,404);
         }
-        return \response()->json($product, 200);
+        $data = [
+            'success' => false,
+            'data' => [
+                'product' => $product
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     public function productsFilter(Request $request, $category){
-        $category = ProductCategory::whereName($category)->firstOrFail();
-        $products = $category->products->where('live', 1);
+        $category = ProductCategory::where('name', $category)->first();
+        $products = $category ? $category->products->where('live', 1) : null;
+        if ( !$category || !$products ){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'No Products Found.'
+                ]
+            ];
+            return \response()->json($data, 200);
+        }
         $data = [
-            'count' => $products->count(),
-            'products' => $products,
-            'user' => $request->user()
+            'success' => true,
+            'data' => [
+                'count' => $products->count(),
+                'products' => $products,
+            ]
         ];
         return \response()->json($data, 200);
     }
@@ -61,7 +87,10 @@ class ClientController extends Controller
         ]);
         $data = [
             'success' => true,
-            'order' => $order
+            'data' => [
+                'message' => 'Order has been placed',
+                'order' => $order
+            ]
         ];
         return \response()->json($data, 201);
     }
@@ -70,7 +99,10 @@ class ClientController extends Controller
         $orders = $request->user()->orders;
         $data = [
             'success' => true,
-            'orders' => $orders
+            'data' => [
+                'count' => $orders->count(),
+                'orders' => $orders
+            ]
         ];
         return \response()->json($data, 200);
     }
@@ -80,25 +112,38 @@ class ClientController extends Controller
         if (!$order){ 
             $data = [
                 'success' => false,
-                'error' => 'Order not found.'
+                'data' => [
+                    'message' => 'Order not found'
+                ]
             ];
             return \response()->json($data,404);
         }
-        $this->authorize('view', $order);
         $data = [
             'success' => true,
-            'order' => $order
+            'data' => [
+                'order' => $order
+            ]
         ];
         return \response()->json($data, 200);
     }
 
     public function ordercancel(Request $request, $id){
         $order = Order::find($id);
-        if (!$order->user === $request->user()) return \response()->json(403);
+        if (!$order->user === $request->user()) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Order not found'
+                ]
+            ];
+            return \response()->json($data, 200);
+        };
         $order->delete();
         $data = [
             'success' => true,
-            'message' => 'Order canceled successfully'
+            'data' => [
+                'message' => 'Order has been canceled'
+            ]
         ];
         return \response()->json($data, 200);
     }

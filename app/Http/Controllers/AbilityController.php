@@ -3,9 +3,17 @@
 namespace App\Http\Controllers;
 use App\Ability;
 use Illuminate\Http\Request;
-
+use Gate;
 class AbilityController extends Controller
 {
+
+    public function all(){
+        if ( Gate::denies('ability-view') ){
+            return 404;
+        }
+        return Ability::all();
+    }
+
     public function store(Request $request){
         $ability = Ability::create([
             'name' => $request->get('name'),

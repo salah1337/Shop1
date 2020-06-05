@@ -31,12 +31,15 @@ class RoleSeeder extends Seeder
                 'name' => $role[0],
                 'label' => $role[1]
             ]);
-            for ($i=0; $i < 2; $i++) {
-                $ability = Ability::all()->random()->id;
-                if (!$createdRole->ableTo($ability)) {
-                    $createdRole->allowTo($ability);
-                };
-            };
+            $ability = Ability::all()->random()->id;
+            $createdRole->allowTo($ability);
+
+            // for ($i=0; $i < 2; $i++) {
+            //     $ability = Ability::all()->random()->id;
+            //     if (!$createdRole->ableTo($ability)) {
+            //         $createdRole->allowTo($ability);
+            //     };
+            // };
         };
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Role;
-
+use App\User;
 class RolesController extends Controller
 {
     public function all(){
@@ -24,8 +24,9 @@ class RolesController extends Controller
     }
 
     public function show($id){
-        $role = Role::find($id);
-        if (!$role) return \response()->json(['error' => 'Not found', 404]);
+        // $role = Role::find($id);
+        // if (!$role) return \response()->json(['error' => 'Not found', 404]);
+        $this->authorize('getOrder', $id);
         $users = $role->users->pluck('username', 'id');
         $data = [
             'success' => true,
@@ -39,6 +40,8 @@ class RolesController extends Controller
     }
 
     public function store(Request $request){
+        $user = User::find(1);
+        $this->authorize('create', $user);
         $request->validate([
             'name' => 'required|unique:roles|max:255',
         ]);

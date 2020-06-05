@@ -39,7 +39,6 @@ class StoreOrderRequest extends FormRequest
             'email' => 'required|string|max:255',
             'shipped' => 'required|boolean',
             'trackingNumber' => 'required|integer',
-            'user_id' => 'required|integer',
         ];
     }
 }
