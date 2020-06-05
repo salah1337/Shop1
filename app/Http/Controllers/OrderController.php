@@ -15,19 +15,16 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return Order::all();
+        $orders = Order::all();
+        $data = [
+            'success' => true, 
+            'data' => [
+                'count' => $orders->count(),
+                'orders' => $orders
+            ]
+        ];
+        return \response()->json($data, 200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -36,7 +33,7 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        return Order::create([
+        $order = Order::create([
             'amount' => $request->get('amount'),
             'shipName' => $request->get('shipName'),
             'shipAddress' => $request->get('shipAddress'),
@@ -54,6 +51,14 @@ class OrderController extends Controller
             'trackingNumber' => $request->get('trackingNumber'),
             'user_id' => $request->get('user_id'),
         ]);
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'Order created',
+                'order' => $order
+            ]
+        ];
+        return \response()->json($data, 201);
     }
 
     /**
@@ -64,7 +69,23 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        return Order::find($id) ?? 'Not Found';
+        $order =  Order::find($id);
+        if (!$order){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Order not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $data = [
+            'success' => true,
+            'data' => [
+                'order' => $order
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -87,9 +108,17 @@ class OrderController extends Controller
      */
     public function update(StoreOrderRequest $request, $id)
     {
-        $order = Order::find($id);
-        if ( !$order ) return 'Not Found';
-        return $order->update([
+        $order =  Order::find($id);
+        if (!$order){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Order not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $order->update([
             'amount' => $request->get('amount'),
             'shipName' => $request->get('shipName'),
             'shipAddress' => $request->get('shipAddress'),
@@ -107,6 +136,14 @@ class OrderController extends Controller
             'trackingNumber' => $request->get('trackingNumber'),
             'user_id' => $request->get('user_id'),
         ]);
+        $data = [
+            'success' => true,
+            'data' => [
+                'message' => 'Order updated',
+                'order' => $order
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -117,8 +154,24 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        $order = Order::find($id);
-        if ( !$order ) return 'Not Found';
-        return $order->delete();
+        $order =  Order::find($id);
+        if (!$order){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Order not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $order->delete();
+        $data = [
+            'success' => true,
+            'data' => [
+                'message' => 'Order deleted',
+                'order' => $order
+            ]
+        ];
+        return \response()->json($data, 201);
     }
 }
