@@ -59,10 +59,12 @@ class AuthController extends Controller
         public function user(Request $request){
             $data = [
                 'success' => true, 
-                'user' => [
-                    'info' => $request->user(),
-                    'isStaff' => $request->user()->roles->count() > 0 ? true :false,
-                ],
+                'data' => [
+                    'user' => [
+                        'info' => $request->user(),
+                        'isStaff' => $request->user()->roles->count() > 0 ? true :false,
+                    ],
+                ]
             ];
             return \response()->json($data, 200);
         }
@@ -71,13 +73,17 @@ class AuthController extends Controller
             if ($request->user()->isA('admin')){
                 $data = [
                     'success' => true, 
-                    'admin' => true,
+                    'data' => [
+                        'admin' => true,
+                    ]
                 ];
                 return \response()->json($data, 200);
             } else {
                 $data = [
                     'success' => true, 
-                    'admin' => false,
+                    'data' => [
+                        'admin' => false,
+                    ]
                 ];
                 return \response()->json($data, 200);
             }
