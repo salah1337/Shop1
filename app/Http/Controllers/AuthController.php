@@ -55,4 +55,31 @@ class AuthController extends Controller
 
             return response()->json('Logged out successfully', 200);
         }
+
+        public function user(Request $request){
+            $data = [
+                'success' => true, 
+                'user' => [
+                    'info' => $request->user(),
+                    'isStaff' => $request->user()->roles->count() > 0 ? true :false,
+                ],
+            ];
+            return \response()->json($data, 200);
+        }
+
+        public function admin(Request $request){
+            if ($request->user()->isA('admin')){
+                $data = [
+                    'success' => true, 
+                    'admin' => true,
+                ];
+                return \response()->json($data, 200);
+            } else {
+                $data = [
+                    'success' => true, 
+                    'admin' => false,
+                ];
+                return \response()->json($data, 200);
+            }
+        }
 }

@@ -12,9 +12,17 @@ class StaffController extends Controller
     public function all()
     {
         $roles = Role::all();
-        foreach ($roles as $role) {
-            $data[$role->name] = $role->users->pluck('username', 'id');
+        $data['data']['roleCount'] = $roles->count();
+        $data['data']['staffCount'] = 0;
+        foreach ($roles as $key=>$role) {
+            $data['data']['staff'][$key] = [
+                'name' => $role->name,
+                'users' => $role->users->pluck('username', 'id'),
+                'count' => $role->users->count()
+            ];
+            $data['data']['staffCount'] += $role->users->count();
         }
+        $data['success'] = true;
         return \response()->json($data, 200);
     }
 
@@ -33,6 +41,9 @@ class StaffController extends Controller
     public function show($id)
     {
         $user = User::find($id);
+        if (!$user){
+            $user = User::where('username', $id)->first();
+        };
         if ( $user && $user->roles->count() > 0 ){
             $data = [
                 'user' => $user, 

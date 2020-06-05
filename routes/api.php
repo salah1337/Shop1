@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::post('/login', 'AuthController@login');
+// Route::get('/user', 'AuthController@user')->middleware('auth:api');
 Route::post('/register', 'AuthController@register');
-Route::get('/logout', 'AuthController@logout')->middleware('auth:api');
+Route::post('/logout', 'AuthController@logout')->middleware('auth:api');
 
 
 Route::prefix('/customer')->group(function(){
@@ -28,6 +29,7 @@ Route::prefix('/customer')->group(function(){
     Route::get('/product/{id}', 'ClientController@productsOne');
     Route::post('/products/{category}', 'ClientController@productsFilter')->middleware('auth:api');
     Route::group(['middleware' => 'auth:api'], function(){
+        Route::get('/user', 'AuthController@user');
         Route::post('/order', 'ClientController@orderPlace');
         Route::get('/orders', 'ClientController@ordersAll');
         Route::get('/order/{id}', 'ClientController@orderShow');
@@ -38,7 +40,7 @@ Route::prefix('/customer')->group(function(){
 
 
 Route::group(['middleware' => ['auth:api', 'staff']], function() {
-    Route::prefix('/user')->group( function(){
+    Route::prefix('user')->group( function(){
         Route::get('/', 'UserController@index'); //admin manager
         Route::post('/add', 'UserController@store'); //admin manager
         Route::get('/show/{id}', 'UserController@show'); // admin manager owner 
@@ -84,8 +86,6 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
             Route::get('/delete/{id}', 'ProductOptionController@destroy'); // admin manager 
         });
     });
-    
-    
     Route::prefix('/order')->group( function(){
         Route::get('/', 'OrderController@index'); // admin manager
         Route::post('/add', 'OrderController@store'); // admin manager user 
@@ -101,7 +101,7 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
             Route::get('/delete/{id}', 'OrderDetailController@destroy'); // admin manager owner
         });
     });
-
+    Route::get('/admin', 'AuthController@admin');
     Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function(){
         Route::prefix('/staff')->group( function(){
             Route::get('/', 'StaffController@all');

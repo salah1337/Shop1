@@ -9,11 +9,17 @@ class RolesController extends Controller
 {
     public function all(){
         $roles = Role::all();
-        $data = [
-            'success' => true,
-            'count' => $roles->count(),
-            'roles' => $roles,
-        ];
+        $data['data']['count'] = $roles->count();
+        foreach ($roles as $key => $role) {
+            $data['data']['roles'][$key] = [
+                'name' => $role->name,
+                'label' => $role->label,
+                'abilities' => $role->abilities,
+                'userCount' => $role->users->count(),
+                'id' => $role->id
+            ];
+        };
+        $data['success'] = true;
         return \response()->json($data, 200);
     }
 
@@ -23,25 +29,37 @@ class RolesController extends Controller
         $users = $role->users->pluck('username', 'id');
         $data = [
             'success' => true,
-            'role' => $role,
-            'users' => $users
+            'data' => [
+                'role' => $role,
+                'users' => $users,
+                'userCount' => $users->count()
+            ]
         ];
         return \response()->json($data, 200);
     }
 
     public function store(Request $request){
+        $request->validate([
+            'name' => 'required|unique:roles|max:255',
+        ]);
         $role = Role::create([
             'name' => $request->get('name'),
             'label' => $request->get('label') ?? \ucfirst($request->get('name'))
         ]);
         $data = [
             'success' => true,
-            'role' => $role,
+            'data' => [
+                'message' => 'Role created successfully',
+                'role' => $role
+            ]
         ];
         return \response()->json($data, 201);
     }
   
     public function update(Request $request, $id){
+        $request->validate([
+            'name' => 'required|unique:roles|max:255',
+        ]);
         $role = Role::find($id);
         if (!$role) return \response()->json(['error' => 'Not found', 404]);
         $role->update([

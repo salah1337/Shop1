@@ -26,6 +26,7 @@ class Role extends Model
     }
 
     public function allowTo($ability){
+        $ability = Ability::find($ability);
         if(is_string($ability)){
             $ability =  Ability::whereName($ability)->firstOrFail();
         }
@@ -33,6 +34,7 @@ class Role extends Model
     }
     
     public function unAllow($ability){
+        $ability = Ability::find($ability);
         if(is_string($ability)){
             $ability =  Ability::whereName($ability)->firstOrFail();
         }

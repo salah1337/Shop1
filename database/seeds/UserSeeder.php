@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\User;
+use App\Role;
 class UserSeeder extends Seeder
 {
     /**
@@ -12,5 +13,16 @@ class UserSeeder extends Seeder
     public function run()
     {
         factory(App\User::class, 10)->create();
+        for ($i=0; $i < rand(3, User::all()->count()); $i++) { 
+            User::all()->random()->assignRole(Role::all()->random());
+        };
+        $admin = User::create([
+            'username' => '1337',
+            'email' => '69@1337.com',
+            'firstName' => 'admin',
+            'lastName' => 'admin',
+            'password' => Hash::make('lollol')
+        ]);
+        $admin->assignRole('admin');
     }
 }
