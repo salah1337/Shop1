@@ -24,9 +24,16 @@ class RolesController extends Controller
     }
 
     public function show($id){
-        // $role = Role::find($id);
-        // if (!$role) return \response()->json(['error' => 'Not found', 404]);
-        $this->authorize('getOrder', $id);
+        $role = Role::find($id);
+        if (!$role) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'role not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        };
         $users = $role->users->pluck('username', 'id');
         $data = [
             'success' => true,
@@ -40,8 +47,6 @@ class RolesController extends Controller
     }
 
     public function store(Request $request){
-        $user = User::find(1);
-        $this->authorize('create', $user);
         $request->validate([
             'name' => 'required|unique:roles|max:255',
         ]);
@@ -52,7 +57,7 @@ class RolesController extends Controller
         $data = [
             'success' => true,
             'data' => [
-                'message' => 'Role created successfully',
+                'message' => 'role created',
                 'role' => $role
             ]
         ];
@@ -64,58 +69,111 @@ class RolesController extends Controller
             'name' => 'required|unique:roles|max:255',
         ]);
         $role = Role::find($id);
-        if (!$role) return \response()->json(['error' => 'Not found', 404]);
+        if (!$role) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'role not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        };
         $role->update([
             'name' => $request->get('name'),
             'label' => $request->get('label') ?? \ucfirst($request->get('name'))
         ]);
         $data = [
             'success' => true,
-            'role' => $role,
+            'data' => [
+                'message' => 'role updated',
+                'role' => $role,
+            ]
         ];
-        return \response()->json($data, 201);
+        return \response()->json($data, 200);
     }
 
     public function destroy($id){
         $role = Role::find($id);
-        if (!$role) return \response()->json(['error' => 'Not found', 404]);
-        $rolename = $role->name;
+        if (!$role) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'role not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        };
         $role->delete();
         $data = [
             'success' => true, 
-            'message' => $rolename.' Role deleted successfully'
+            'data' => [
+                'message' => 'role deleted',
+                'role' => $role
+            ]
         ];
-        return \response()->json($data, 201);
+        return \response()->json($data, 200);
     }
 
     public function allowTo(Request $request){
         $role = Role::where('name', $request->get('role'))->first();
-        if (!$role) return \response()->json(['error' => 'Not found', 404]);
+        if (!$role) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'role not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        };
         $ability = $request->get('ability');
         if($role->ableTo($ability)){
-            return \response()->json(['message' => $role->name.' already has ability '.$ability, 200]);
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => $role->name.' already has ability '.$ability
+                ]
+            ];
+            return \response()->json($data, 200);
         }
         $role->allowTo($ability);
         $data = [
             'success' => true, 
-            'message' => 'Ability '.$ability.' added to '.$role->name.' successfully'
+            'data' => [
+                'message' => 'Ability '.$ability.' added to '.$role->name.' successfully'
+            ]
         ];
-        return \response()->json($data, 201);
+        return \response()->json($data, 200);
     }
 
     public function unAllow(Request $request){
         $role = Role::where('name', $request->get('role'))->first();
-        if (!$role) return \response()->json(['error' => 'Not found', 404]); 
+        if($role->ableTo($ability)){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => $role->name.' already has ability '.$ability
+                ]
+            ];
+            return \response()->json($data, 200);
+        }
         $ability = $request->get('ability');
         if(!$role->ableTo($ability)){
-            return \response()->json(['message' => $role->name.' does not have ability '.$ability, 200]);
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => $role->name.' does not have ability '.$ability
+                ]
+            ];
+            return \response()->json($data, 200);
         }
         $role->unAllow($ability);
         $data = [
             'success' => true, 
-            'message' => 'Ability '.$ability.' removed from '.$role->name.' successfully'
+            'data' => [
+                'message' => 'Ability '.$ability.' removed from '.$role->name.' successfully'
+            ]
         ];
-        return \response()->json($data, 201);
+        return \response()->json($data, 200);
     }
 
 }
