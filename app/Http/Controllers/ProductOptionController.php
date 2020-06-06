@@ -15,7 +15,15 @@ class ProductOptionController extends Controller
      */
     public function index()
     {
-        return ProductOption::all();
+        $productOptions = ProductOption::all();
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'count' => $productOptions->count(),
+                'productOptions' => $productOptions
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -36,12 +44,20 @@ class ProductOptionController extends Controller
      */
     public function store(StoreProductOptionRequest $request)
     {
-        return ProductOption::create([
+        $productOption = ProductOption::create([
             'priceIncrement' => $request->get('priceIncrement'),
             'option_id' => $request->get('option_id'),
             'option_group_id' => $request->get('option_group_id'),
             'product_id' => $request->get('product_id'),
         ]);
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product option created',
+                'productOption' => $productOption
+            ]
+        ];
+        return \response()->json($data, 201);
     }
 
     /**
@@ -52,7 +68,23 @@ class ProductOptionController extends Controller
      */
     public function show($id)
     {
-        return ProductOption::find($id);
+        $productOption = ProductOption::find($id);
+        if( !$productOption ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product option not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'productOption' => $productOption
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -75,15 +107,30 @@ class ProductOptionController extends Controller
      */
     public function update(StoreProductOptionRequest $request, $id)
     {
-        $option = ProductOption::find($id);
-        if ( !$option ) return 'Not Found';
-
-        return $option->update([
+        $productOption = ProductOption::find($id);
+        if( !$productOption ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product option not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $productOption->update([
             'priceIncrement' => $request->get('priceIncrement'),
             'option_id' => $request->get('option_id'),
             'option_group_id' => $request->get('option_group_id'),
             'product_id' => $request->get('product_id'),
         ]);
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product option updated',
+                'productOption' => $productOption
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -94,9 +141,24 @@ class ProductOptionController extends Controller
      */
     public function destroy($id)
     {
-        $option = ProductOption::find($id);
-        if ( !$option ) return 'Not Found';
-
+        $productOption = ProductOption::find($id);
+        if( !$productOption ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product option not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
         $option->delete();
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product option deleted',
+                'productOption' => $productOption
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 }
