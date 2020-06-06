@@ -30,20 +30,78 @@ class StaffController extends Controller
     public function assign(Request $request)
     {
         $user = User::where('username', $request->get('username'))->first();
+        if( !$user ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'user not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        if( $user->isA($request->get('role')) ) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => $user->username.' already has the '.$request->get('role').' role'
+                ]
+            ];
+            return \response()->json($data, 200);
+        }
         $user->assignRole($request->get('role'));
         $data = [
-            'message' => $user->username.' has been assigned the role of '.$request->get('role'),
+            'success' => true,
+            'data' => [
+                'message' => $user->username.' has been assigned the '.$request->get('role').' role'
+            ]
         ];
         return \response()->json($data, 200);
     }
 
+    public function revoke(Request $request)
+    {
+        $user = User::where('username', $request->get('username'))->first();
+        if( !$user ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'user not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        if( !$user->isA($request->get('role')) ) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => $user->username.' does not have the '.$request->get('role').' role'
+                ]
+            ];
+            return \response()->json($data, 200);
+        }
+        $user->revokeRole($request->get('role'));
+        $data = [
+            'success' => false,
+            'data' => [
+                'message' => $user->username.' no longer has the '.$request->get('role').' role'
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
 
+    
     public function show($id)
     {
-        $user = User::find($id);
-        if (!$user){
-            $user = User::where('username', $id)->first();
-        };
+        $user = User::find($id) ?? User::where('username', $id)->first();
+        if( !$user ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'user not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
         if ( $user && $user->roles->count() > 0 ){
             $data = [
                 'user' => $user, 
@@ -52,25 +110,12 @@ class StaffController extends Controller
             return \response()->json($data, 200);
         }
         $data = [
-            'error' => 'Not found'
+            'success' => false,
+                'data' =>  [
+                    'message' => 'user found is not a staff member',
+                    'user' => $user,
+                ]
         ];
-        return \response()->json($data, 404);
-    }
-
-
-    public function revoke(Request $request)
-    {
-        $user = User::where('username', $request->get('username'))->first();
-        if ( $user && $user->isA($request->get('role')) ){
-            $user->revokeRole($request->get('role'));
-            $data = [
-                'message' => $user->username.' is no longer '.$request->get('role')
-            ];
-            return \response()->json($data, 200);
-        }
-        $data = [
-            'error' => 'Not found'
-        ];
-        return \response()->json($data, 404);
+        return \response()->json($data, 400);
     }
 }
