@@ -14,18 +14,15 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        // return csrf_token();
-        return ProductCategory::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $productCategories = ProductCategory::all();
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'count' => $productCategories->count(),
+                'productCategories' => $productCategories
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -36,9 +33,17 @@ class ProductCategoryController extends Controller
      */
     public function store(StoreProductCategoryRequest $request)
     {
-            return ProductCategory::create([
-                'name' => $request->get('name')
-            ]);
+        $productCategory = ProductCategory::create([
+            'name' => $request->get('name')
+        ]);
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product category created',
+                'productCategory' => $productCategory
+            ]
+        ];
+        return \response()->json($data, 201);
     }
 
     /**
@@ -49,20 +54,24 @@ class ProductCategoryController extends Controller
      */
     public function show($id)
     {
-        return ProductCategory::find($id) ?? 'Not Found';
+        $productCategory = ProductCategory::find($id);
+        if( !$productCategory ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product category not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'productCategory' => $productCategory
+            ]
+        ];
+        return \response()->json($data, 200);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ProductCategory  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ProductCategory $id)
-    {
-        
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -73,10 +82,26 @@ class ProductCategoryController extends Controller
     public function update(StoreProductCategoryRequest $request, $id)
     {
         $productCategory = ProductCategory::find($id);
-        if (!$productCategory ) return 'Not Found';
-        return $productCategory->update([
+        if( !$productCategory ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product category not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $productCategory->update([
             'name' => $request->get('name')
         ]);
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product category updated',
+                'productCategory' => $productCategory
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -88,7 +113,23 @@ class ProductCategoryController extends Controller
     public function destroy(ProductCategory $id)
     {
         $productCategory = ProductCategory::find($id);
-        if (!$productCategory ) return 'Not Found';
-        return $productCategory->delete();
+        if( !$productCategory ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product category not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $productCategory->delete();
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product category deleted',
+                'productCategory' => $productCategory
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 }

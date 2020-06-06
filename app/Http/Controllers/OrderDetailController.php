@@ -15,17 +15,15 @@ class OrderDetailController extends Controller
      */
     public function index()
     {
-        return OrderDetail::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $orderDetails = OrderDetail::all();
+        $data = [
+            'success' => true,
+            'data' => [
+                'count' => $orderDetails->count(),
+                'orderDetails' => $orderDetails
+            ] 
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -36,7 +34,7 @@ class OrderDetailController extends Controller
      */
     public function store(StoreOrderDetailsRequest $request)
     {
-        return OrderDetail::create([
+        $oderDetail = OrderDetail::create([
             'name' => $request->get('name'),
             'SKU' => $request->get('SKU'),
             'price' => $request->get('price'),

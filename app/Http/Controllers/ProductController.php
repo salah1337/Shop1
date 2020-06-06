@@ -17,7 +17,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        $products = Product::all();
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'count' => $products->count(),
+                'products' => $products
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -38,7 +46,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        return Product::create([
+        $product = Product::create([
             'name' => $request->get('name'), 
             'location' => $request->get('location'), 
             'SKU' => $request->get('SKU'), 
@@ -54,6 +62,14 @@ class ProductController extends Controller
             'unlimited' => $request->get('unlimited'), 
             'category_id' => $request->get('category_id'), 
         ]);
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product created',
+                'product' => $product
+            ]
+        ];
+        return \response()->json($data, 201);
     }
 
     /**
@@ -64,20 +80,24 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return Product::find($id) ?? 'Not Found';
+        $product = Product::find($id);
+        if( !$product ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'product' => $product
+            ]
+        ];
+        return \response()->json($data, 200);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -88,8 +108,16 @@ class ProductController extends Controller
     public function update(StoreProductRequest $request, $id)
     {
         $product = Product::find($id);
-        if ( !$product ) return 'Not Found';
-        return $product->update([
+        if( !$product ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $product->update([
             'name' => $request->get('name'), 
             'location' => $request->get('location'), 
             'SKU' => $request->get('SKU'), 
@@ -105,6 +133,14 @@ class ProductController extends Controller
             'unlimited' => $request->get('unlimited'),
             'category_id' => $request->get('category_id'), 
         ]);
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product updated',
+                'product' => $product
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 
     /**
@@ -116,7 +152,23 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        if ( !$product ) return 'Not Found';
-        return $product->delete();
+        if( !$product ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $product->delete();
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product deleted',
+                'product' => $product
+            ]
+        ];
+        return \response()->json($data, 200);
     }
 }
