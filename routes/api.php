@@ -43,10 +43,11 @@ Route::prefix('/customer')->group(function(){
             Route::get('/cancel/{id}', 'ClientController@orderCancel');
         });
         Route::group(['prefix' => 'cart'], function(){
-            Route::get('/', 'ClientController@cart');
-            Route::post('/clear', 'ClientController@cartClear');
-            Route::post('/add/{id}', 'ClientController@cartAdd');
-            Route::post('/remove/{id}', 'ClientController@cartRemove');
+            Route::get('/', 'CartController@cart');
+            Route::post('/clear', 'CartController@Clear');
+            Route::post('/add/{id}', 'CartController@Add');
+            Route::post('/remove/{id}', 'CartController@Remove');
+            Route::post('/removeitem/{id}', 'CartController@RemoveItem');
         });
     });
     

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Order;
+use App\Models\CartItem;
 use App\User;
 use App\Http\Requests\StoreOrderRequest;
 
@@ -74,8 +75,10 @@ class ClientController extends Controller
         $data = [
             'success' => true,
             'data' => [
-                'count' => $cart->products->count(),
-                'cart' => $cart->products
+                'cart' => [
+                    'count' => $cart->items->count(),
+                    'items' => $cart->items,
+                ]
             ]
         ];
         return \response()->json($data, 200);
@@ -83,7 +86,7 @@ class ClientController extends Controller
 
     public function cartClear(Request $request){
         $cart =  $request->user()->cart;
-        if( !$cart->products || $cart->products->count() < 0 ){
+        if( !$cart->items->count() ){
             $data = [
                 'success' => true,
                 'data' => [
@@ -91,7 +94,7 @@ class ClientController extends Controller
                 ]
             ];
         }else{
-            $cart->clear();
+            CartItem::where('cart_id', $cart->id)->delete();
             $data = [
                 'success' => true,
                 'data' => [
@@ -103,23 +106,79 @@ class ClientController extends Controller
     }
 
     public function cartAdd(Request $request, $id){
+        // find prod & check if exists & live
         $product = Product::find($id);
         if( $product && $product->live ){
+            // get cart & check if car has prod
             $cart =  $request->user()->cart;
-            if( $cart->has($product) ){
-                $data = [
-                    'success' => false,
-                    'data' => [
-                        'message' => 'product already in cart',
-                    ]
-                ];
+            if ( $cart->has($product) ){
+                // if cart has prod increment count
+                $cartItem = CartItem::where('product_id', $product->id)->first();
+                $cartItem->update([
+                    'count' => $cartItem->count + 1,
+                    'price' => $product->price * ($cartItem->count + 1)
+                ]);
             }else{
-                $cart->add($product);
+                // if cart doens't have prod add it
+                CartItem::create([
+                    'name' => $product->name,
+                    'count' => 1,
+                    'price' => $product->price,
+                    'product_id' => $product->id,
+                    'cart_id' => $cart->id
+                ]);
+            }
+            $data = [
+                'success' => true,
+                'data' => [
+                    'message' => 'product added to cart',
+                    'cart' => [
+                        'count' => $cart->items->count(),
+                        'items' => $cart->items,
+                    ]
+                ]
+            ];
+            return \response()->json($data, 200);
+        }
+        $data = [
+            'success' => false,
+            'data' => [
+                'message' => 'product not found'
+            ]
+        ];
+        return \response()->json($data, 404);
+    }
+  
+    public function cartRemove(Request $request, $id){
+        // find prod & check if exists & live
+        $product = Product::find($id);
+        if( $product && $product->live ){
+            // get cart & check if car has prod
+            $cart =  $request->user()->cart;
+            if ( $cart->has($product) ){
+                // if cart has prod decrement count
+                $cartItem = CartItem::where('product_id', $product->id)->first();
+                $cartItem->update([
+                    'count' => $cartItem->count - 1,
+                    'price' => $product->price * ($cartItem->count - 1)
+                ]);
+                if( $cartItem->count <= 0 ) $cartItem->delete();
                 $data = [
                     'success' => true,
                     'data' => [
-                        'message' => 'product addded to cart',
-                        'cart' => $cart->products
+                        'message' => 'product removed from cart',
+                        'cart' => [
+                            'count' => $cart->items->count(),
+                            'items' => $cart->items,
+                        ]
+                    ]
+                ];
+            }else{
+                // if cart doens't have prod return
+                $data = [
+                    'success' => false,
+                    'data' => [
+                        'message' => 'product not in cart',
                     ]
                 ];
             }
@@ -133,28 +192,34 @@ class ClientController extends Controller
         ];
         return \response()->json($data, 404);
     }
-  
-    public function cartRemove(Request $request, $id){
+
+    public function cartRemoveItem(Request $request, $id){
+        // find prod & check if exists & live
         $product = Product::find($id);
         if( $product && $product->live ){
+            // get cart & check if car has prod
             $cart =  $request->user()->cart;
-            if( !$cart->has($product) ){
-                $data = [
-                    'success' => false,
-                    'data' => [
-                        'message' => 'product is not in cart',
-                    ]
-                ];
-            }else{
-                $cart->remove($product);
+            if ( $cart->has($product) ){
+                // if cart has prod decrement count
+                $cartItem = CartItem::where('product_id', $product->id)->first();
+                $cartItem->delete();
                 $data = [
                     'success' => true,
                     'data' => [
                         'message' => 'product removed from cart',
-                        'cart' => $cart->products
+                        'cart' => $cart->items
                     ]
                 ];
-            }          
+            }else{
+                // if cart doens't have prod return
+                $data = [
+                    'success' => true,
+                    'data' => [
+                        'message' => 'product not in cart',
+                        'cart' => $cart->items
+                    ]
+                ];
+            }
             return \response()->json($data, 200);
         }
         $data = [
@@ -165,8 +230,6 @@ class ClientController extends Controller
         ];
         return \response()->json($data, 404);
     }
-
-
 
 
 

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\Product;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
@@ -19,20 +19,20 @@ class Cart extends Model
     }
 
     public function has($product){
-        return $this->items()->where('id', $product->id)->first() ? true : false;
+        return $this->items()->where('product_id', $product->id)->first() ? true : false;
     }
 
-    public function add($product){
-        $this->items()->save($product);
+    public function add($item){
+        $this->items()->save($item);
     }
     
-    public function remove($product){
-        $this->items()->detach($product);
+    public function remove($item){
+        $this->items()->detach($item);
     }
     
     public function clear(){
-        foreach ($this->items() as $key => $product) {
-            $this->items()->detach($product);
+        foreach ($this->items() as $key => $item) {
+            $this->items()->detach($item);
         }
         return $this->items();
     }
