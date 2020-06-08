@@ -31,6 +31,6 @@ class Order extends Model
         return $this->belongsTo('App\User');
     }
     function details(){
-        return $this->hasOne('App\Models\OrderDetails');
+        return $this->hasMany('App\Models\OrderDetail');
     }
 }

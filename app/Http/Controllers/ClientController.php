@@ -36,7 +36,7 @@ class ClientController extends Controller
             return \response()->json($data,404);
         }
         $data = [
-            'success' => false,
+            'success' => true,
             'data' => [
                 'product' => $product
             ]
@@ -65,6 +65,111 @@ class ClientController extends Controller
         ];
         return \response()->json($data, 200);
     }
+
+
+
+
+    public function cart(Request $request){
+        $cart =  $request->user()->cart;
+        $data = [
+            'success' => true,
+            'data' => [
+                'count' => $cart->products->count(),
+                'cart' => $cart->products
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+
+    public function cartClear(Request $request){
+        $cart =  $request->user()->cart;
+        if( !$cart->products || $cart->products->count() < 0 ){
+            $data = [
+                'success' => true,
+                'data' => [
+                    'message' => 'cart has no items'
+                ]
+            ];
+        }else{
+            $cart->clear();
+            $data = [
+                'success' => true,
+                'data' => [
+                    'message' => 'cart has been emptied'
+                ]
+            ];
+        }
+        return \response()->json($data, 200);
+    }
+
+    public function cartAdd(Request $request, $id){
+        $product = Product::find($id);
+        if( $product && $product->live ){
+            $cart =  $request->user()->cart;
+            if( $cart->has($product) ){
+                $data = [
+                    'success' => false,
+                    'data' => [
+                        'message' => 'product already in cart',
+                    ]
+                ];
+            }else{
+                $cart->add($product);
+                $data = [
+                    'success' => true,
+                    'data' => [
+                        'message' => 'product addded to cart',
+                        'cart' => $cart->products
+                    ]
+                ];
+            }
+            return \response()->json($data, 200);
+        }
+        $data = [
+            'success' => false,
+            'data' => [
+                'message' => 'product not found'
+            ]
+        ];
+        return \response()->json($data, 404);
+    }
+  
+    public function cartRemove(Request $request, $id){
+        $product = Product::find($id);
+        if( $product && $product->live ){
+            $cart =  $request->user()->cart;
+            if( !$cart->has($product) ){
+                $data = [
+                    'success' => false,
+                    'data' => [
+                        'message' => 'product is not in cart',
+                    ]
+                ];
+            }else{
+                $cart->remove($product);
+                $data = [
+                    'success' => true,
+                    'data' => [
+                        'message' => 'product removed from cart',
+                        'cart' => $cart->products
+                    ]
+                ];
+            }          
+            return \response()->json($data, 200);
+        }
+        $data = [
+            'success' => false,
+            'data' => [
+                'message' => 'product not found'
+            ]
+        ];
+        return \response()->json($data, 404);
+    }
+
+
+
+
+
 
     public function orderPlace(StoreOrderRequest $request){
         $order = Order::create([

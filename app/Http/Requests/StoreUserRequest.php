@@ -13,7 +13,8 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->ableTo('store-user') || $this->user()->isA('admin');
+        return true;
+        // return $this->user()->ableTo('store-user') || $this->user()->isA('admin');
     }
 
     /**

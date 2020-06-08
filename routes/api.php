@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::post('/lol', function (Request $request) {
+        $details = $request->get('1');
+
+        return $details;
+    });
 Route::post('/login', 'AuthController@login');
 Route::get('/abilities', 'AbilityController@all');
 // Route::get('/user', 'AuthController@user')->middleware('auth:api');
@@ -31,12 +36,20 @@ Route::prefix('/customer')->group(function(){
     Route::post('/products/{category}', 'ClientController@productsFilter');
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('/user', 'AuthController@user');
-        Route::post('/order', 'ClientController@orderPlace');
-        Route::get('/orders', 'ClientController@ordersAll');
-        Route::get('/order/{id}', 'ClientController@orderShow');
-        Route::get('/order/cancel/{id}', 'ClientController@orderCancel');
+        Route::group(['prefix' => 'order'], function(){
+            Route::post('/', 'ClientController@orderPlace');
+            Route::get('/all', 'ClientController@ordersAll');
+            Route::get('/show/{id}', 'ClientController@orderShow');
+            Route::get('/cancel/{id}', 'ClientController@orderCancel');
+        });
+        Route::group(['prefix' => 'cart'], function(){
+            Route::get('/', 'ClientController@cart');
+            Route::post('/clear', 'ClientController@cartClear');
+            Route::post('/add/{id}', 'ClientController@cartAdd');
+            Route::post('/remove/{id}', 'ClientController@cartRemove');
+        });
     });
-
+    
 });
 
 

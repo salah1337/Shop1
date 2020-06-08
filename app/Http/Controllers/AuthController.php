@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use App\User;
+use App\Http\Requests\StoreUserRequest;
+use Illuminate\Support\Facades\Hash;
 
 // Import
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -46,14 +49,49 @@ class AuthController extends Controller
             return with(new AccessTokenController($this->server, $this->tokens, $this->jwt))
                 ->issueToken($request);
         }
+     
+     
+        public function register(StoreUserRequest $request)
+        {
+            $user = User::create([
+                'username' => $request->get('username'),
+                'email' => $request->get('email'),
+                'firstName' => $request->get('firstName'),
+                'lastName' => $request->get('lastName'),
+                'password' => Hash::make($request->get('password')),
+                'title' => $request->get('title'),
+                'gender' => $request->get('gender'),
+                'city' => $request->get('city'),
+                'state' => $request->get('state'),
+                'zip' => $request->get('zip'),
+                'phone' => $request->get('phone'),
+                'fax' => $request->get('fax'),
+                'country' => $request->get('country'),
+                'adress' => $request->get('adress'),
+                'adress2' => $request->get('adress2'),
+            ]);
+    
+            $data = [
+                'success' => true,
+                'data' => [
+                    'user' => $user
+                ]
+            ];
+            return response()->json($data);
+        }
 
         public function logout(Request $request) {
 
             $request->user()->tokens->each(function ($token, $key) {
                 $token->delete();
             });
-
-            return response()->json('Logged out successfully', 200);
+            $data = [
+                'success' => true,
+                'data' => [
+                    'message' => 'Logged out successfully'
+                ]
+            ];
+            return response()->json($data, 200);
         }
 
         public function user(Request $request){
@@ -62,7 +100,9 @@ class AuthController extends Controller
                 'data' => [
                     'user' => [
                         'info' => $request->user(),
+                        'cart' => $request->user()->cart->products,
                         'isStaff' => $request->user()->roles->count() > 0 ? true :false,
+                        'isAdmin' => $request->user()->isA('admin'),
                     ],
                 ]
             ];

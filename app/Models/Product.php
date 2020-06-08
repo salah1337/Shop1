@@ -25,6 +25,9 @@ class Product extends Model
         'location',
         'category_id'
     ];
+    public function carts(){
+        return $this->belongsToMany('App\Models\Cart');
+    }
     function options(){
         return $this->hasMany('App\Models\ProductOption');
     }

@@ -54,6 +54,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function cart(){
+        return $this->hasOne('App\Models\Cart');
+    }
+    
     public function orders(){
         return $this->hasMany('App\Models\Order');
     }
