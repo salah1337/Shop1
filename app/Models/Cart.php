@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cart extends Model
 {
     protected $fillable = [
-        'user_id'
+        'user_id', 'total'
     ];
     
     public function user(){
@@ -16,6 +16,14 @@ class Cart extends Model
 
     public function items(){
         return $this->hasMany('App\Models\CartItem');
+    }
+    
+    public function setTotal(){
+        $this->total = 0;
+        $items = $this->items();
+        foreach ($items as $key => $item) {
+            $this->total += $item->price;
+        }
     }
 
     public function has($product){

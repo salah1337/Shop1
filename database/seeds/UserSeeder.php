@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\User;
 use App\Role;
+use App\Models\Cart;
 class UserSeeder extends Seeder
 {
     /**
@@ -14,7 +15,11 @@ class UserSeeder extends Seeder
     {
         factory(App\User::class, 10)->create();
         for ($i=0; $i < rand(3, User::all()->count()); $i++) { 
-            User::all()->random()->assignRole(Role::all()->random());
+            $user = User::all()->random();
+            $user->assignRole(Role::all()->random());
+            Cart::create([
+                'user_id' => $user->id,
+            ]);
         };
         $admin = User::create([
             'username' => '1337',
@@ -24,5 +29,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('lollol')
         ]);
         $admin->assignRole('admin');
+        Cart::create([
+            'user_id' => $admin->id,
+        ]);
     }
 }

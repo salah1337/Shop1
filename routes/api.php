@@ -42,7 +42,7 @@ Route::prefix('/customer')->group(function(){
             Route::get('/show/{id}', 'ClientController@orderShow');
             Route::get('/cancel/{id}', 'ClientController@orderCancel');
         });
-        Route::group(['prefix' => 'cart'], function(){
+        Route::group(['prefix' => '/cart'], function(){
             Route::get('/', 'CartController@cart');
             Route::post('/clear', 'CartController@Clear');
             Route::post('/add/{id}', 'CartController@Add');

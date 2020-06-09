@@ -100,7 +100,7 @@ class AuthController extends Controller
                 'data' => [
                     'user' => [
                         'info' => $request->user(),
-                        'cart' => $request->user()->cart->products,
+                        'cart' => $request->user()->cart->items(),
                         'isStaff' => $request->user()->roles->count() > 0 ? true :false,
                         'isAdmin' => $request->user()->isA('admin'),
                     ],

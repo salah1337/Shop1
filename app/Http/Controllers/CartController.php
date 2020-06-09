@@ -38,10 +38,6 @@ class CartController extends Controller
                 'success' => true,
                 'data' => [
                     'message' => 'cart has been emptied',
-                    'cart' => [
-                        'count' => $cart->items->count(),
-                        'items' => $cart->items,
-                    ]
                 ]
             ];
         }
@@ -149,7 +145,7 @@ class CartController extends Controller
                 $data = [
                     'success' => true,
                     'data' => [
-                        'message' => 'product removed from cart',
+                        'message' => 'product deleted from cart',
                         'cart' => [
                             'count' => $cart->items->count(),
                             'items' => $cart->items,
