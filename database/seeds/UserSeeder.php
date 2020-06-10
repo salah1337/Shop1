@@ -17,9 +17,6 @@ class UserSeeder extends Seeder
         for ($i=0; $i < rand(3, User::all()->count()); $i++) { 
             $user = User::all()->random();
             $user->assignRole(Role::all()->random());
-            Cart::create([
-                'user_id' => $user->id,
-            ]);
         };
         $admin = User::create([
             'username' => '1337',

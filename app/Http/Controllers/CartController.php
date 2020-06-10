@@ -9,6 +9,21 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    public function updateCartTotal($id){
+        $cart = Cart::find($id);
+        $items = $cart->items;
+        $total = 0;
+        foreach ($items as $key => $item) {
+            $total = $total + ($item->price * $item->count);
+        }
+        $cart->update([
+            'total' => $total
+        ]);
+        $cart = Cart::find($id);
+        return $cart;
+    }
+
+
     public function cart(Request $request){
         $cart =  $request->user()->cart;
         $data = [
@@ -16,6 +31,7 @@ class CartController extends Controller
             'data' => [
                 'cart' => [
                     'count' => $cart->items->count(),
+                    'total' => $cart->total,
                     'items' => $cart->items,
                 ]
             ]
@@ -34,6 +50,7 @@ class CartController extends Controller
             ];
         }else{
             CartItem::where('cart_id', $cart->id)->delete();
+            $cart = $this->updateCartTotal($cart->id);
             $data = [
                 'success' => true,
                 'data' => [
@@ -52,10 +69,9 @@ class CartController extends Controller
             $cart =  $request->user()->cart;
             if ( $cart->has($product) ){
                 // if cart has prod increment count
-                $cartItem = CartItem::where('product_id', $product->id)->first();
+                $cartItem = $cart->items->where('product_id', $product->id)->first();
                 $cartItem->update([
                     'count' => $cartItem->count + 1,
-                    'price' => $product->price * ($cartItem->count + 1)
                 ]);
             }else{
                 // if cart doens't have prod add it
@@ -67,12 +83,14 @@ class CartController extends Controller
                     'cart_id' => $cart->id
                 ]);
             }
+            $cart = $this->updateCartTotal($cart->id);
             $data = [
                 'success' => true,
                 'data' => [
                     'message' => 'product added to cart',
                     'cart' => [
                         'count' => $cart->items->count(),
+                        'total' => $cart->total,
                         'items' => $cart->items,
                     ]
                 ]
@@ -96,18 +114,19 @@ class CartController extends Controller
             $cart =  $request->user()->cart;
             if ( $cart->has($product) ){
                 // if cart has prod decrement count
-                $cartItem = CartItem::where('product_id', $product->id)->first();
+                $cartItem = $cart->items->where('product_id', $product->id)->first();
                 $cartItem->update([
                     'count' => $cartItem->count - 1,
-                    'price' => $product->price * ($cartItem->count - 1)
                 ]);
                 if( $cartItem->count <= 0 ) $cartItem->delete();
+                $cart = $this->updateCartTotal($cart->id);
                 $data = [
                     'success' => true,
                     'data' => [
                         'message' => 'product removed from cart',
                         'cart' => [
                             'count' => $cart->items->count(),
+                            'total' => $cart->total,
                             'items' => $cart->items,
                         ]
                     ]
@@ -140,14 +159,16 @@ class CartController extends Controller
             $cart =  $request->user()->cart;
             if ( $cart->has($product) ){
                 // if cart has prod decrement count
-                $cartItem = CartItem::where('product_id', $product->id)->first();
+                $cartItem = $cart->items->where('product_id', $product->id)->first();
                 $cartItem->delete();
+                $cart = $this->updateCartTotal($cart->id);
                 $data = [
                     'success' => true,
                     'data' => [
                         'message' => 'product deleted from cart',
                         'cart' => [
                             'count' => $cart->items->count(),
+                            'total' => $cart->total,
                             'items' => $cart->items,
                         ]
                     ]

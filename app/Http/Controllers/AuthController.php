@@ -95,12 +95,17 @@ class AuthController extends Controller
         }
 
         public function user(Request $request){
+            $cart =  $request->user()->cart;
             $data = [
                 'success' => true, 
                 'data' => [
                     'user' => [
                         'info' => $request->user(),
-                        'cart' => $request->user()->cart->items(),
+                        'cart' => [
+                            'count' => $cart->items->count(),
+                            'total' => $cart->total,
+                            'items' => $cart->items,
+                        ],
                         'isStaff' => $request->user()->roles->count() > 0 ? true :false,
                         'isAdmin' => $request->user()->isA('admin'),
                     ],

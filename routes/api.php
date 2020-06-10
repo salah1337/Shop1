@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/lol', function (Request $request) {
-        $details = $request->get('1');
 
-        return $details;
+        return $request;
     });
+
 Route::post('/login', 'AuthController@login');
 Route::get('/abilities', 'AbilityController@all');
 // Route::get('/user', 'AuthController@user')->middleware('auth:api');

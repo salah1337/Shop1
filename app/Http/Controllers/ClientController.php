@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\CartItem;
 use App\User;
 use App\Http\Requests\StoreOrderRequest;
@@ -77,7 +78,7 @@ class ClientController extends Controller
 
     public function orderPlace(StoreOrderRequest $request){
         $order = Order::create([
-            'amount' => $request->get('amount'),
+            'amount' => 1,
             'shipName' => $request->get('shipName'),
             'shipAddress' => $request->get('shipAddress'),
             'shipAddress2' => $request->get('shipAddress2'),
@@ -91,14 +92,30 @@ class ClientController extends Controller
             'tax' => $request->get('tax'),
             'email' => $request->get('email'),
             'shipped' => $request->get('shipped'),
-            'trackingNumber' => $request->get('trackingNumber'),
+            'trackingNumber' => 123,
             'user_id' => $request->user()->id,
         ]);
+        foreach ($request->get('details') as $key => $detail) {
+            $product = Product::find($detail['product_id']);
+            $orderDetail = OrderDetail::create([
+                'name' => $product['name'],
+                'SKU' => $product['SKU'],
+                'price' => $detail['price'],
+                'quantity' => $detail['count'],
+                'product_id' => $detail['product_id'],
+                'order_id' => $order['id'],
+            ]);
+            $orderDetails[$key] = $orderDetail;
+        }
         $data = [
             'success' => true,
             'data' => [
                 'message' => 'Order has been placed',
-                'order' => $order
+                'order' => [
+                    'info' => $order,
+                    'details' => $orderDetails
+                ]
+
             ]
         ];
         return \response()->json($data, 201);

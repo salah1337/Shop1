@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class StoreOrderRequest extends FormRequest
 {
@@ -13,7 +15,8 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->ableTo('store-order') || $this->user()->isA('admin');
+        // return $this->user()->ableTo('store-order') || $this->user()->isA('admin');
+        return true;
     }
 
     /**
@@ -24,7 +27,6 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => 'required|integer',
             'shipName' => 'required|string|max:255',
             'shipAddress' => 'required|string|max:255',
             'shipAddress2' => 'required|string|max:255',
@@ -38,7 +40,13 @@ class StoreOrderRequest extends FormRequest
             'tax' => 'required|integer',
             'email' => 'required|string|max:255',
             'shipped' => 'required|boolean',
-            'trackingNumber' => 'required|integer',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'amount.required' => 'A amount is required',
         ];
     }
 }

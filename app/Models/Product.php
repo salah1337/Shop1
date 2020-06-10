@@ -23,7 +23,7 @@ class Product extends Model
         'live',
         'unlimited',
         'location',
-        'category_id'
+        'product_category_id'
     ];
     public function carts(){
         return $this->belongsToMany('App\Models\Cart');

@@ -60,7 +60,7 @@ class ProductController extends Controller
             'stock' => $request->get('stock'), 
             'live' => $request->get('live'), 
             'unlimited' => $request->get('unlimited'), 
-            'category_id' => $request->get('category_id'), 
+            'product_category_id' => $request->get('category_id'), 
         ]);
         $data = [
             'success' => true,

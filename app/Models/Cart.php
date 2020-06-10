@@ -17,14 +17,6 @@ class Cart extends Model
     public function items(){
         return $this->hasMany('App\Models\CartItem');
     }
-    
-    public function setTotal(){
-        $this->total = 0;
-        $items = $this->items();
-        foreach ($items as $key => $item) {
-            $this->total += $item->price;
-        }
-    }
 
     public function has($product){
         return $this->items()->where('product_id', $product->id)->first() ? true : false;
