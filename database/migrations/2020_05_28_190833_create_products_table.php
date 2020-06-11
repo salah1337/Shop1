@@ -19,8 +19,8 @@ class CreateProductsTable extends Migration
 
             $table->softDeletes();
 
-            $table->string('SKU');
-            $table->string('name');
+            $table->string('SKU')->unique();
+            $table->string('name')->unique();
             $table->float('price');
             $table->float('weight');
             $table->string('cartDesc');

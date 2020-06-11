@@ -40,6 +40,7 @@ class StoreOrderRequest extends FormRequest
             'tax' => 'required|integer',
             'email' => 'required|string|max:255',
             'shipped' => 'required|boolean',
+            'details' => 'required|array',
         ];
     }
 

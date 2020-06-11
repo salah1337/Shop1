@@ -123,6 +123,9 @@ class ClientController extends Controller
 
     public function ordersAll(Request $request){
         $orders = $request->user()->orders;
+        foreach ($orders as $key => $order) {
+            $order['details'] = $order->details;
+        }
         $data = [
             'success' => true,
             'data' => [

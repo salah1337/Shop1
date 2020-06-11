@@ -24,8 +24,8 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'SKU' => 'required|string|max:255',
+            'name' => 'required|string|unique:products|max:255',
+            'SKU' => 'required|string|unique:products|max:255',
             'price' => 'required|integer',
             'weight' => 'required|integer',
             'cartDesc' => 'required|string|max:255',
@@ -37,7 +37,7 @@ class StoreProductRequest extends FormRequest
             'stock' => 'required|integer',
             'live' => 'required|boolean',
             'unlimited' => 'required|boolean',
-            'category_id' => 'required|integer',
+            'product_category_id' => 'required|integer',
         ];
     }
 

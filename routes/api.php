@@ -36,6 +36,7 @@ Route::prefix('/customer')->group(function(){
     Route::post('/products/{category}', 'ClientController@productsFilter');
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('/user', 'AuthController@user');
+        
         Route::group(['prefix' => 'order'], function(){
             Route::post('/', 'ClientController@orderPlace');
             Route::get('/all', 'ClientController@ordersAll');
