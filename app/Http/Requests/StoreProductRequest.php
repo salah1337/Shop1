@@ -32,7 +32,7 @@ class StoreProductRequest extends FormRequest
             'shortDesc' => 'required|string|max:255',
             'longDesc' => 'required|string',
             'thumb' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
+            'image' => 'image',
             'location' => 'required|string|max:255',
             'stock' => 'required|integer',
             'live' => 'required|boolean',

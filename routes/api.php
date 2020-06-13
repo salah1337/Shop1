@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
 
 
         Route::get('/products', 'AdminController@products');
+        Route::get('/orders', 'AdminController@orders');
         
         
         Route::prefix('/staff')->group( function(){

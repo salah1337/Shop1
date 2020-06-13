@@ -46,6 +46,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+
         $product = Product::create([
             'name' => $request->get('name'), 
             'location' => $request->get('location'), 
@@ -56,12 +57,13 @@ class ProductController extends Controller
             'shortDesc' => $request->get('shortDesc'), 
             'longDesc' => $request->get('longDesc'), 
             'thumb' => $request->get('thumb'), 
-            'image' => $request->get('image'), 
+            'image' => $request->image->getClientOriginalName(), 
             'stock' => $request->get('stock'), 
             'live' => $request->get('live'), 
             'unlimited' => $request->get('unlimited'), 
             'product_category_id' => $request->get('product_category_id'), 
         ]);
+        $request->image->storeAs('public', $request->image->getClientOriginalName());
         $data = [
             'success' => true,
             'data' =>  [
