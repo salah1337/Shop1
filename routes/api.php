@@ -107,7 +107,8 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
         Route::post('/add', 'OrderController@store'); // admin manager user 
         Route::get('/show/{id}', 'OrderController@show'); //admin manager owner
         Route::post('/update/{id}', 'OrderController@update'); // admin manager owner
-        Route::get('/delete/{id}', 'OrderController@destroy'); // admin manager owner
+        Route::get('/ship/{id}', 'OrderController@ship'); // admin manager owner
+        Route::get('/cancel/{id}', 'OrderController@cancel'); // admin manager owner
     
         Route::prefix('/detail')->group( function(){
             Route::get('/', 'OrderDetailController@index'); // admin manager
@@ -119,6 +120,12 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
     });
     Route::get('/admin', 'AuthController@admin');
     Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function(){
+        Route::get('/abilities', 'AdminController@abilities');
+
+
+        Route::get('/products', 'AdminController@products');
+        
+        
         Route::prefix('/staff')->group( function(){
             Route::get('/', 'StaffController@all');
             Route::post('/assign', 'StaffController@assign');

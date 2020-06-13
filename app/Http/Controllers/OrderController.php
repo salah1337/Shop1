@@ -16,6 +16,9 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::all();
+        foreach ($orders as $key => $order) {
+            $order['details'] = $order->details;
+        }
         $data = [
             'success' => true, 
             'data' => [
@@ -54,7 +57,7 @@ class OrderController extends Controller
         $data = [
             'success' => true, 
             'data' => [
-                'message' => 'Order created',
+                'message' => 'order created',
                 'order' => $order
             ]
         ];
@@ -74,7 +77,7 @@ class OrderController extends Controller
             $data = [
                 'success' => false,
                 'data' => [
-                    'message' => 'Order not found'
+                    'message' => 'order not found'
                 ]
             ];
             return \response()->json($data, 404);
@@ -113,7 +116,7 @@ class OrderController extends Controller
             $data = [
                 'success' => false,
                 'data' => [
-                    'message' => 'Order not found'
+                    'message' => 'order not found'
                 ]
             ];
             return \response()->json($data, 404);
@@ -139,10 +142,45 @@ class OrderController extends Controller
         $data = [
             'success' => true,
             'data' => [
-                'message' => 'Order updated',
+                'message' => 'order updated',
                 'order' => $order
             ]
         ];
+        return \response()->json($data, 200);
+    }
+   
+    public function ship(Request $request, $id)
+    {
+        $order =  Order::find($id);
+        if (!$order){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'order not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        if ($order->shipped){
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'order already shipped',
+                    'order' => $order
+                ]
+            ];
+        }else{
+            $order->update([
+                'shipped' => true,
+            ]);
+            $data = [
+                'success' => true,
+                'data' => [
+                    'message' => 'order marked as shipped',
+                    'order' => $order
+                ]
+            ];
+        }
         return \response()->json($data, 200);
     }
 
@@ -152,14 +190,14 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function cancel($id)
     {
         $order =  Order::find($id);
         if (!$order){
             $data = [
                 'success' => false,
                 'data' => [
-                    'message' => 'Order not found'
+                    'message' => 'order not found'
                 ]
             ];
             return \response()->json($data, 404);
@@ -168,7 +206,7 @@ class OrderController extends Controller
         $data = [
             'success' => true,
             'data' => [
-                'message' => 'Order deleted',
+                'message' => 'order cancelled',
                 'order' => $order
             ]
         ];

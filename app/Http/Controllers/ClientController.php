@@ -158,14 +158,23 @@ class ClientController extends Controller
 
     public function ordercancel(Request $request, $id){
         $order = Order::find($id);
-        if (!$order->user === $request->user()) {
+        if (!$order) {
             $data = [
                 'success' => false,
                 'data' => [
                     'message' => 'Order not found'
                 ]
             ];
-            return \response()->json($data, 200);
+            return \response()->json($data, 404);
+        }
+        if (!$order->user === $request->user() ) {
+            $data = [
+                'success' => false,
+                'data' => [
+                    'message' => 'Order not found'
+                ]
+            ];
+            return \response()->json($data, 404);
         };
         $order->delete();
         $data = [

@@ -81,7 +81,7 @@ class StaffController extends Controller
         }
         $user->revokeRole($request->get('role'));
         $data = [
-            'success' => false,
+            'success' => true,
             'data' => [
                 'message' => $user->username.' no longer has the '.$request->get('role').' role'
             ]

@@ -147,15 +147,15 @@ class RolesController extends Controller
 
     public function unAllow(Request $request){
         $role = Role::where('name', $request->get('role'))->first();
-        if($role->ableTo($ability)){
+        if (!$role) {
             $data = [
                 'success' => false,
                 'data' => [
-                    'message' => $role->name.' already has ability '.$ability
+                    'message' => 'role not found'
                 ]
             ];
-            return \response()->json($data, 200);
-        }
+            return \response()->json($data, 404);
+        };
         $ability = $request->get('ability');
         if(!$role->ableTo($ability)){
             $data = [

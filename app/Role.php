@@ -26,10 +26,7 @@ class Role extends Model
     }
 
     public function allowTo($ability){
-        $ability = Ability::find($ability);
-        if(is_string($ability)){
-            $ability =  Ability::whereName($ability)->firstOrFail();
-        }
+        $ability =  Ability::where('name', $ability)->first();
         $this->abilities()->save($ability);
     }
     

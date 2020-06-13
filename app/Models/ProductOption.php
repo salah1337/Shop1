@@ -13,7 +13,7 @@ class ProductOption extends Model
     function product(){
         return $this->belongsTo('App\Models\Product');
     }
-    function options(){
-        return $this->hasMany('App\Models\Option');
+    function option(){
+        return $this->belongsTo('App\Models\Option');
     }
 }
