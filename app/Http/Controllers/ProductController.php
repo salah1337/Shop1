@@ -46,6 +46,22 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        
+
+        $images = json_decode($request->get('images'));
+        // return \response()->json(gettype($images), 500);
+
+        $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
+        $imageNames = [];
+        foreach ($images as $key => $image) {
+            $imageNames[$key] = time().'_'.$request->images[$key]->getClientOriginalName();
+        }
+
+        $request->thumb->storeAs('public', $thumbnailName);
+        
+        foreach ($images as $key => $image) {
+            $request->images[$key]->storeAs('public', $imageNames[$key]);
+        }
 
         $product = Product::create([
             'name' => $request->get('name'), 
@@ -56,14 +72,15 @@ class ProductController extends Controller
             'cartDesc' => $request->get('cartDesc'), 
             'shortDesc' => $request->get('shortDesc'), 
             'longDesc' => $request->get('longDesc'), 
-            'thumb' => $request->get('thumb'), 
-            'image' => $request->image->getClientOriginalName(), 
+            'thumb' => $thumbnailName, 
+            'image' => json_encode($imageNames), 
             'stock' => $request->get('stock'), 
             'live' => $request->get('live'), 
             'unlimited' => $request->get('unlimited'), 
             'product_category_id' => $request->get('product_category_id'), 
         ]);
-        $request->image->storeAs('public', $request->image->getClientOriginalName());
+       
+
         $data = [
             'success' => true,
             'data' =>  [

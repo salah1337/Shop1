@@ -31,7 +31,7 @@ class StoreProductRequest extends FormRequest
             'cartDesc' => 'required|string|max:255',
             'shortDesc' => 'required|string|max:255',
             'longDesc' => 'required|string',
-            'thumb' => 'required|string|max:255',
+            'thumb' => 'required|image',
             'image' => 'image',
             'location' => 'required|string|max:255',
             'stock' => 'required|integer',
