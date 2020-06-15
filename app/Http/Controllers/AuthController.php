@@ -53,6 +53,12 @@ class AuthController extends Controller
      
         public function register(StoreUserRequest $request)
         {
+            $imageName = 'noimage.jpg';
+            if($request->image){
+                $imageName = time().'_'.$request->image->getClientOriginalName();
+            }
+            $request->image->storeAs('public', $imageName);
+
             $user = User::create([
                 'username' => $request->get('username'),
                 'email' => $request->get('email'),
@@ -69,6 +75,7 @@ class AuthController extends Controller
                 'country' => $request->get('country'),
                 'adress' => $request->get('adress'),
                 'adress2' => $request->get('adress2'),
+                'image' => $imageName,
             ]);
     
             $data = [

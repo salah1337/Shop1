@@ -42,6 +42,21 @@ class AdminController extends Controller
         ];
         return \response()->json($data, 200);
     }
+  
+    public function product($id){
+        $product = Product::withTrashed()->where('id', $id)->get();
+        $product['options'] = $product->options;
+        foreach ($product['options'] as $key => $option) {
+            $option->name = $option->option->name;
+        }
+        $data = [
+            'success' => true, 
+            'data' => [
+                'product' => $product
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
     public function orders()
     {
         $orders = Order::withTrashed()->get();

@@ -31,7 +31,7 @@ class RoleSeeder extends Seeder
                 'name' => $role[0],
                 'label' => $role[1]
             ]);
-            $ability = Ability::all()->random()->id;
+            $ability = Ability::all()->random()->name;
             $createdRole->allowTo($ability);
 
             // for ($i=0; $i < 2; $i++) {
