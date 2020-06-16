@@ -31,9 +31,16 @@ Route::post('/logout', 'AuthController@logout')->middleware('auth:api');
 Route::get('/images/{name}', 'FilesController@images');
 
 Route::prefix('/customer')->group(function(){
-    Route::get('/products', 'ClientController@productsAll');
-    Route::get('/product/{id}', 'ClientController@productsOne');
-    Route::post('/products/{category}', 'ClientController@productsFilter');
+    // Route::get('/products', 'ClientController@productsAll');
+    // Route::get('/product/{id}', 'ClientController@productsOne');
+    // Route::post('/products/{category}', 'ClientController@productsFilter');
+
+    Route::group(['prefix' => 'product'], function(){
+        Route::get('/all', 'ClientController@productsAll');
+        Route::get('/show/{id}', 'ClientController@productsOne');
+        Route::get('/all/filter/{category}', 'ClientController@productsFilter');
+    });
+
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('/user', 'AuthController@user');
         
@@ -123,10 +130,16 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
         Route::get('/abilities', 'AdminController@abilities');
 
 
-        Route::get('/products', 'AdminController@products');
-        Route::get('/product/{id}', 'AdminController@product');
+        // Route::get('/products', 'AdminController@products');
+        // Route::get('/product/show/{id}', 'AdminController@product');
         Route::get('/orders', 'AdminController@orders');
         
+        
+        
+        Route::prefix('/product')->group( function(){
+            Route::get('/all', 'AdminController@products');
+            Route::get('/show/{id}', 'AdminController@product');
+        });
         
         Route::prefix('/staff')->group( function(){
             Route::get('/', 'StaffController@all');

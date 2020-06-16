@@ -147,6 +147,7 @@ class ClientController extends Controller
             ];
             return \response()->json($data,404);
         }
+        $order['details'] = $order->details;
         $data = [
             'success' => true,
             'data' => [
