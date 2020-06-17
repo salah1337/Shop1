@@ -37,6 +37,7 @@ class ClientController extends Controller
             ];
             return \response()->json($data,404);
         }
+        $product['details'] = $product->details;
         $data = [
             'success' => true,
             'data' => [

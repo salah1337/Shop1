@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\User;
+use App\Models\Cart;
 use App\Http\Requests\StoreUserRequest;
 use Illuminate\Support\Facades\Hash;
 
@@ -56,8 +57,8 @@ class AuthController extends Controller
             $imageName = 'noimage.jpg';
             if($request->image){
                 $imageName = time().'_'.$request->image->getClientOriginalName();
+                $request->image->storeAs('public', $imageName);
             }
-            $request->image->storeAs('public', $imageName);
 
             $user = User::create([
                 'username' => $request->get('username'),
@@ -77,7 +78,11 @@ class AuthController extends Controller
                 'adress2' => $request->get('adress2'),
                 'image' => $imageName,
             ]);
-    
+            
+            Cart::create([
+                'user_id' => $user->id
+            ]);
+
             $data = [
                 'success' => true,
                 'data' => [
