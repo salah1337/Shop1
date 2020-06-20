@@ -28,6 +28,9 @@ Route::get('/abilities', 'AbilityController@all');
 // Route::get('/user', 'AuthController@user')->middleware('auth:api');
 Route::post('/register', 'AuthController@register');
 Route::post('/logout', 'AuthController@logout')->middleware('auth:api');
+
+Route::get('/product/categories', 'ProductCategoryController@index');
+
 Route::get('/images/{name}', 'FilesController@images');
 
 Route::prefix('/customer')->group(function(){

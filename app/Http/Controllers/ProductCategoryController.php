@@ -19,7 +19,7 @@ class ProductCategoryController extends Controller
             'success' => true,
             'data' =>  [
                 'count' => $productCategories->count(),
-                'productCategories' => $productCategories
+                'categories' => $productCategories
             ]
         ];
         return \response()->json($data, 200);
@@ -40,7 +40,7 @@ class ProductCategoryController extends Controller
             'success' => true,
             'data' =>  [
                 'message' => 'product category created',
-                'productCategory' => $productCategory
+                'categories' => $productCategory
             ]
         ];
         return \response()->json($data, 201);

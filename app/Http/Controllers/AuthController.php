@@ -8,6 +8,8 @@ use App\User;
 use App\Models\Cart;
 use App\Http\Requests\StoreUserRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
 
 // Import
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -83,6 +85,8 @@ class AuthController extends Controller
                 'user_id' => $user->id
             ]);
 
+            Mail::to($user->email)->send(new WelcomeMail());
+
             $data = [
                 'success' => true,
                 'data' => [
@@ -108,6 +112,10 @@ class AuthController extends Controller
 
         public function user(Request $request){
             $cart =  $request->user()->cart;
+            $orders =  $request->user()->orders;
+            foreach ($orders as $key => $order) {
+                $order['details'] = $order->details;
+            }
             $data = [
                 'success' => true, 
                 'data' => [
@@ -117,6 +125,10 @@ class AuthController extends Controller
                             'count' => $cart->items->count(),
                             'total' => $cart->total,
                             'items' => $cart->items,
+                        ],
+                        'orders' => [
+                            'orders' => $orders,
+                            'count' => $orders->count()  
                         ],
                         'isStaff' => $request->user()->roles->count() > 0 ? true :false,
                         'isAdmin' => $request->user()->isA('admin'),
