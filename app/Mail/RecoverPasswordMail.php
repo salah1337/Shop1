@@ -30,6 +30,5 @@ class RecoverPasswordMail extends Mailable
     public function build()
     {
         return $this->markdown('emails.forgotPassword');
-        // return $this->view('emails.forgotPassword');
     }
 }

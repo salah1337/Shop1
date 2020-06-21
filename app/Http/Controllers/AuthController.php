@@ -7,6 +7,7 @@ use Auth;
 use App\User;
 use App\Models\Cart;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeMail;
@@ -159,9 +160,8 @@ class AuthController extends Controller
             }
         }
 
-        public function reset(Request $request){
+        public function resetEmail(Request $request){
             $email = $request->get('email');
-
             if (!User::where('email', $email)->first()){
                 $data = [
                     'success' => false, 
@@ -172,21 +172,53 @@ class AuthController extends Controller
                 return \response()->json($data, 404);
             }
             $token = \Str::random(10);
+            \DB::table('password_resets')->where('email', $email)->delete();
             \DB::table('password_resets')->insert([
                 'email' => $email,
                 'token' => $token
             ]);
-
             Mail::to($email)->send(new RecoverPasswordMail($token));
-            // Mail::send('emails.forgotPassword', ['token' => $token], function($message) use ($email){
-            //     $message->to($email);
-            //     $message->subject('Password Reset');
-            // }); 
-
             $data = [
                 'success' => true, 
                 'data' => [
                     'message' => 'Check your email.',
+                ]
+            ];
+            return \response()->json($data, 200);
+        }
+
+        public function resetPassword(ResetPasswordRequest $request){
+            $token = $request->get('token');
+            
+            if (!$passwordReset = \DB::table('password_resets')->where('token', $token)->first()) {
+                $data = [
+                    'success' => false,
+                    'data' => [
+                        'message' => 'token expired'
+                    ]
+                ];
+                return \response()->json($data, 200);
+            }
+
+            if (!$user = User::where('email', $passwordReset->email)->first()){
+                $data = [
+                    'success' => false,
+                    'data' => [
+                        'message' => 'user not found'
+                    ]
+                ];
+                return \response()->json($data, 404);
+            }
+            
+            $user->password = Hash::make($request->get('password'));
+            $user->save();
+            
+            \DB::table('password_resets')->where('email', $user->email)->delete();
+
+            $data = [
+                'success' => true,
+                'data' => [
+                    'message' => 'password changed'
                 ]
             ];
             return \response()->json($data, 200);
