@@ -27,6 +27,7 @@ Route::post('/login', 'AuthController@login');
 Route::get('/abilities', 'AbilityController@all');
 // Route::get('/user', 'AuthController@user')->middleware('auth:api');
 Route::post('/register', 'AuthController@register');
+Route::post('/reset', 'AuthController@reset');
 Route::post('/logout', 'AuthController@logout')->middleware('auth:api');
 
 Route::get('/product/categories', 'ProductCategoryController@index');

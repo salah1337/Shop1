@@ -10,6 +10,7 @@ use App\Http\Requests\StoreUserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeMail;
+use App\Mail\RecoverPasswordMail;
 
 // Import
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -156,5 +157,38 @@ class AuthController extends Controller
                 ];
                 return \response()->json($data, 200);
             }
+        }
+
+        public function reset(Request $request){
+            $email = $request->get('email');
+
+            if (!User::where('email', $email)->first()){
+                $data = [
+                    'success' => false, 
+                    'data' => [
+                        'message' => 'User doesn\'t exist',
+                    ]
+                ];
+                return \response()->json($data, 404);
+            }
+            $token = \Str::random(10);
+            \DB::table('password_resets')->insert([
+                'email' => $email,
+                'token' => $token
+            ]);
+
+            Mail::to($email)->send(new RecoverPasswordMail($token));
+            // Mail::send('emails.forgotPassword', ['token' => $token], function($message) use ($email){
+            //     $message->to($email);
+            //     $message->subject('Password Reset');
+            // }); 
+
+            $data = [
+                'success' => true, 
+                'data' => [
+                    'message' => 'Check your email.',
+                ]
+            ];
+            return \response()->json($data, 200);
         }
 }
