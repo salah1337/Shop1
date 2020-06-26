@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Role;
 use App\Ability;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\ProductOption;
 use App\Models\Order;
 class AdminController extends Controller
@@ -27,16 +28,14 @@ class AdminController extends Controller
     public function products(){
         $products = Product::withTrashed()->get();
         foreach ($products as $key => $product) {
-            $options = $product->options;
-            foreach ($options as $key => $option) {
-                $option->name = $option->option->name;
-            }
-            $product['options'] = $options;
+            $product['category'] = ProductCategory::find($product->product_category_id);
+            $product['options'] = $product->options;
         }
         $data = [
-            'success' => true, 
-            'data' => [
+            'success' => true,
+            'data' =>  [
                 'count' => $products->count(),
+                'categories' => ProductCategory::all(),
                 'products' => $products
             ]
         ];

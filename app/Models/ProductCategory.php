@@ -8,7 +8,7 @@ class ProductCategory extends Model
 {
     //
     protected $fillable = [
-        'name'
+        'name', 'icon'
     ];
     function products(){
         return $this->hasMany('App\Models\Product');

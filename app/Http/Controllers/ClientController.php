@@ -16,10 +16,15 @@ class ClientController extends Controller
     
     public function productsAll(){
         $products = Product::all()->where('live', 1);
+        foreach ($products as $key => $product) {
+            $product['category'] = ProductCategory::find($product->product_category_id);
+            $product['options'] = $product->options;
+        }
         $data = [
             'success' => true,
-            'data' => [
+            'data' =>  [
                 'count' => $products->count(),
+                'categories' => ProductCategory::all(),
                 'products' => $products
             ]
         ];
@@ -37,7 +42,8 @@ class ClientController extends Controller
             ];
             return \response()->json($data,404);
         }
-        $product['details'] = $product->details;
+        $product['category'] = ProductCategory::find($product->product_category_id);
+        $product['options'] = $product->options;
         $data = [
             'success' => true,
             'data' => [
@@ -98,6 +104,9 @@ class ClientController extends Controller
         ]);
         foreach ($request->get('details') as $key => $detail) {
             $product = Product::find($detail['product_id']);
+            // foreach ($request->get('productOptions') as $key => $option) {
+                
+            // }
             $orderDetail = OrderDetail::create([
                 'name' => $product['name'],
                 'SKU' => $product['SKU'],

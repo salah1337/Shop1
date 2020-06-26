@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Providers\AppServiceProvider;
 
 class ProductController extends Controller
@@ -18,10 +19,15 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
+        foreach ($products as $key => $product) {
+            $product['category'] = ProductCategory::find($product->product_category_id);
+            $product['options'] = $product->options;
+        }
         $data = [
             'success' => true,
             'data' =>  [
                 'count' => $products->count(),
+                'categories' => ProductCategory::all(),
                 'products' => $products
             ]
         ];
@@ -109,6 +115,8 @@ class ProductController extends Controller
             ];
             return \response()->json($data, 404);
         }
+        $product['category'] = ProductCategory::find($product->product_category_id);
+        $product['options'] = $product->options;
         $data = [
             'success' => true,
             'data' =>  [
@@ -152,6 +160,8 @@ class ProductController extends Controller
             'unlimited' => $request->get('unlimited'),
             'category_id' => $request->get('category_id'), 
         ]);
+        $product['category'] = ProductCategory::find($product->product_category_id);
+        $product['options'] = $product->options;
         $data = [
             'success' => true,
             'data' =>  [
@@ -185,7 +195,6 @@ class ProductController extends Controller
             'success' => true,
             'data' =>  [
                 'message' => 'product deleted',
-                'product' => $product
             ]
         ];
         return \response()->json($data, 200);

@@ -19,7 +19,7 @@ class Product extends Model
         'longDesc',
         'thumb',
         'image',
-        'stock',
+        'stock', 
         'live',
         'unlimited',
         'location',
