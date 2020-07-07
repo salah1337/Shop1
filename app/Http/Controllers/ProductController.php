@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\OptionGroup;
 use App\Providers\AppServiceProvider;
 
 class ProductController extends Controller
@@ -22,6 +23,10 @@ class ProductController extends Controller
         foreach ($products as $key => $product) {
             $product['category'] = ProductCategory::find($product->product_category_id);
             $product['options'] = $product->options;
+            foreach ($product['options'] as $key => $option) {
+                $option['name'] = $option->option->name;
+                $option['group'] = OptionGroup::find($option->option_group_id);
+            }
         }
         $data = [
             'success' => true,
@@ -55,7 +60,8 @@ class ProductController extends Controller
         
 
         $images = json_decode($request->get('images'));
-        // return \response()->json(gettype($images), 500);
+        // $imgFiles = json_decode($request->images);
+        // return \response()->json($request->images, 500);
 
         $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
         $imageNames = [];
@@ -84,6 +90,7 @@ class ProductController extends Controller
             'live' => $request->get('live'), 
             'unlimited' => $request->get('unlimited'), 
             'product_category_id' => $request->get('product_category_id'), 
+            'featured' => 0, 
         ]);
        
 

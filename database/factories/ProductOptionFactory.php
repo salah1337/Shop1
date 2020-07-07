@@ -17,6 +17,6 @@ $factory->define(ProductOption::class, function (Faker $faker) {
         'priceIncrement' => rand(1, 25),
         'option_id' => $option->id,
         'product_id' => Product::all()->random()->id,
-        'option_group_id' => $option->optionGroup
+        'option_group_id' => $option->option_group_id
     ];
 });

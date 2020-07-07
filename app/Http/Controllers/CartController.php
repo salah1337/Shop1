@@ -26,13 +26,20 @@ class CartController extends Controller
 
     public function cart(Request $request){
         $cart =  $request->user()->cart;
+        $items = $cart->items;
+        foreach ($items as $key => $item) {
+            $product = Product::find($item->product_id);
+            $item['description'] = $product->cartDesc;
+            $item['image'] = $product->thumb;
+            $item['tax'] = $product->tax;
+        }
         $data = [
             'success' => true,
             'data' => [
                 'cart' => [
                     'count' => $cart->items->count(),
                     'total' => $cart->total,
-                    'items' => $cart->items,
+                    'items' => $items,
                 ]
             ]
         ];

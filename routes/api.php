@@ -33,6 +33,7 @@ Route::post('/logout', 'AuthController@logout')->middleware('auth:api');
 
 Route::get('/product/categories', 'ProductCategoryController@index');
 
+
 Route::get('/images/{name}', 'FilesController@images');
 
 Route::prefix('/customer')->group(function(){
@@ -49,6 +50,8 @@ Route::prefix('/customer')->group(function(){
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('/user', 'AuthController@user');
         
+        Route::get('/options/groups', 'ClientController@optiongroups');
+
         Route::group(['prefix' => 'order'], function(){
             Route::post('/', 'ClientController@orderPlace');
             Route::get('/all', 'ClientController@ordersAll');

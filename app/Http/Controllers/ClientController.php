@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\OptionGroup;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\CartItem;
@@ -19,13 +20,18 @@ class ClientController extends Controller
         foreach ($products as $key => $product) {
             $product['category'] = ProductCategory::find($product->product_category_id);
             $product['options'] = $product->options;
+            foreach ($product['options'] as $key => $option) {
+                $option['name'] = $option->option->name;
+                $option['group'] = OptionGroup::find($option->option_group_id);
+            }
         }
         $data = [
             'success' => true,
             'data' =>  [
                 'count' => $products->count(),
                 'categories' => ProductCategory::all(),
-                'products' => $products
+                'products' => $products,
+                'optiongroups' => OptionGroup::all()->pluck('name')
             ]
         ];
         return \response()->json($data, 200);
@@ -44,6 +50,10 @@ class ClientController extends Controller
         }
         $product['category'] = ProductCategory::find($product->product_category_id);
         $product['options'] = $product->options;
+        foreach ($product['options'] as $key => $option) {
+            $option['name'] = $option->option->name;
+            $option['group'] = OptionGroup::find($option->option_group_id);
+        }
         $data = [
             'success' => true,
             'data' => [
@@ -74,14 +84,6 @@ class ClientController extends Controller
         ];
         return \response()->json($data, 200);
     }
-
-
-
-
-   
-
-
-
 
     public function orderPlace(StoreOrderRequest $request){
         $order = Order::create([
@@ -192,6 +194,17 @@ class ClientController extends Controller
             'success' => true,
             'data' => [
                 'message' => 'Order has been canceled'
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+
+    public function optiongroups(){
+        $groups = OptionGroup::all();
+        $data = [
+            'success' => true,
+            'data' => [
+                'optiongroups' => $groups
             ]
         ];
         return \response()->json($data, 200);

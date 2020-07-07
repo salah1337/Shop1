@@ -32,6 +32,7 @@ class CreateProductsTable extends Migration
             $table->float('stock');
             $table->boolean('live');
             $table->boolean('unlimited');
+            $table->boolean('featured')->default(0);
             
             $table->bigInteger('product_category_id')->unsigned();
             $table->foreign('product_category_id')->references('id')->on('product_categories');
