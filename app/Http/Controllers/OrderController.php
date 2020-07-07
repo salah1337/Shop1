@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreOrderRequest;
 
@@ -52,13 +54,31 @@ class OrderController extends Controller
             'email' => $request->get('email'),
             'shipped' => $request->get('shipped'),
             'trackingNumber' => $request->get('trackingNumber'),
-            'user_id' => $request->get('user_id'),
+            'user_id' => $request->user()->id,
         ]);
+        foreach ($request->get('details') as $key => $detail) {
+            $product = Product::find($detail['product_id']);
+            // foreach ($request->get('productOptions') as $key => $option) {
+                
+            // }
+            $orderDetail = OrderDetail::create([
+                'name' => $product['name'],
+                'SKU' => $product['SKU'],
+                'price' => $detail['price'],
+                'quantity' => $detail['quantity'],
+                'product_id' => $detail['product_id'],
+                'order_id' => $order['id'],
+            ]);
+            $orderDetails[$key] = $orderDetail;
+        }
         $data = [
             'success' => true, 
             'data' => [
                 'message' => 'order created',
-                'order' => $order
+                'order' => [
+                    'info' => $order,
+                    'details' => $orderDetails
+                ]
             ]
         ];
         return \response()->json($data, 201);
