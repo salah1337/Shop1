@@ -32,7 +32,7 @@ class UpdateProductRequest extends FormRequest
             'shortDesc' => 'string|max:255',
             'longDesc' => 'string',
             'thumb' => 'image',
-            'image' => 'image',
+            // 'image' => 'image',
             'location' => 'string|max:255',
             'stock' => 'integer',
             'live' => 'boolean',

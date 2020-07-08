@@ -152,6 +152,24 @@ class ProductController extends Controller
             ];
             return \response()->json($data, 404);
         }
+        $images = json_decode($request->get('images'));
+        // $imgFiles = json_decode($request->images);
+        // return \response()->json($request->images, 500);
+
+        $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
+        $imageNames = \explode(",", $request->get('image'));
+        // $imageNames = json_decode($request->get('image'));
+        // return \response()->json($imageNames, 500);
+        foreach ($images as $key => $image) {
+            // $imageNames[$key] = time().'_'.$request->images[$key]->getClientOriginalName();
+            \array_push($imageNames, time().'_'.$request->images[$key]->getClientOriginalName());
+        }
+
+        $request->thumb->storeAs('public', $thumbnailName);
+        
+        foreach ($images as $key => $image) {
+            $request->images[$key]->storeAs('public', $imageNames[$key]);
+        }
         $product->update([
             'name' => $request->get('name'), 
             'location' => $request->get('location'), 
@@ -161,12 +179,12 @@ class ProductController extends Controller
             'cartDesc' => $request->get('cartDesc'), 
             'shortDesc' => $request->get('shortDesc'), 
             'longDesc' => $request->get('longDesc'), 
-            'thumb' => $request->get('thumb'), 
-            'image' => $request->get('image'), 
+            'thumb' => $thumbnailName, 
+            'image' => json_encode($imageNames), 
             'stock' => $request->get('stock'), 
             'live' => $request->get('live'), 
-            'unlimited' => $request->get('unlimited'),
-            'category_id' => $request->get('category_id'), 
+            'unlimited' => $request->get('unlimited'), 
+            'product_category_id' => $request->get('product_category_id'), 
         ]);
         $product['category'] = ProductCategory::find($product->product_category_id);
         $product['options'] = $product->options;
