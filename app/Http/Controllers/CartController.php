@@ -29,9 +29,11 @@ class CartController extends Controller
         $items = $cart->items;
         foreach ($items as $key => $item) {
             $product = Product::find($item->product_id);
-            $item['description'] = $product->cartDesc;
-            $item['image'] = $product->thumb;
-            $item['tax'] = $product->tax;
+            if ($product) {
+                $item['description'] = $product->cartDesc;
+                $item['image'] = $product->thumb;
+                $item['tax'] = $product->tax;
+            }
         }
         $data = [
             'success' => true,

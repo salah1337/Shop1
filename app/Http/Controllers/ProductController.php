@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\OptionGroup;
@@ -139,7 +140,7 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreProductRequest $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
         $product = Product::find($id);
         if( !$product ){
