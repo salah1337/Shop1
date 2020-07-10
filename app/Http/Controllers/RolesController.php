@@ -12,10 +12,13 @@ class RolesController extends Controller
         $roles = Role::all();
         $data['data']['count'] = $roles->count();
         foreach ($roles as $key => $role) {
+            $users = $role->users->pluck('username', 'id');
+            
             $data['data']['roles'][$key] = [
                 'name' => $role->name,
                 'label' => $role->label,
                 'abilities' => $role->abilities,
+                'users' => $users,
                 'userCount' => $role->users->count(),
                 'id' => $role->id
             ];
