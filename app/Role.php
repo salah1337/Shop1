@@ -35,6 +35,10 @@ class Role extends Model
         if(is_string($ability)){
             $ability =  Ability::whereName($ability)->firstOrFail();
         }
-        $this->abilities()->detach($ability);
+        $key = $this->abilities()->search(function($ability_){
+            return $ability_ == $ability;
+        });
+        $this->abilities()->pull($key);
+        // $this->abilities()->detach($ability);
     }
 }

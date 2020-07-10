@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Role;
 use App\User;
+use App\Ability;
 class RolesController extends Controller
 {
     public function all(){
@@ -157,20 +158,23 @@ class RolesController extends Controller
             return \response()->json($data, 404);
         };
         $ability = $request->get('ability');
-        if(!$role->ableTo($ability)){
+        $ability =  Ability::where('name', $ability)->first();
+
+        if(!$role->ableTo($ability->name)){
             $data = [
                 'success' => false,
                 'data' => [
-                    'message' => $role->name.' does not have ability '.$ability
+                    'message' => $role->name.' does not have ability '.$ability->name
                 ]
             ];
             return \response()->json($data, 200);
         }
-        $role->unAllow($ability);
+        // $role->unAllow($ability);
+        \DB::table('ability_role')->where(['role_id'=> $role->id, 'ability_id' => $ability->id])->delete();
         $data = [
             'success' => true, 
             'data' => [
-                'message' => 'Ability '.$ability.' removed from '.$role->name.' successfully'
+                'message' => 'Ability '.$ability->name.' removed from '.$role->name.' successfully'
             ]
         ];
         return \response()->json($data, 200);
