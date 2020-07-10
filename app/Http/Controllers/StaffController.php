@@ -12,17 +12,38 @@ class StaffController extends Controller
     public function all()
     {
         $roles = Role::all();
-        $data['data']['roleCount'] = $roles->count();
-        $data['data']['staffCount'] = 0;
-        foreach ($roles as $key=>$role) {
-            $data['data']['staff'][$key] = [
-                'name' => $role->name,
-                'users' => $role->users->pluck('username', 'id'),
-                'count' => $role->users->count()
-            ];
-            $data['data']['staffCount'] += $role->users->count();
+
+        $users = [];
+        
+        foreach (User::all() as $key => $user) {
+            if ($user->roles->count() > 0){
+                \array_push($users, $user);
+            }
         }
-        $data['success'] = true;
+        foreach ($users as $key => $user) {
+            $user['roles'] = $user->roles;
+        }
+        foreach ($user->roles as $key => $role) {
+            $role['abilities'] = $role->abilities;
+        }
+        $data = [
+            'success' => true,
+            'data' => [
+                'staffMembers' => $users,
+            ]            
+        ];
+        
+        // $data['data']['roleCount'] = $roles->count();
+        // $data['data']['staffCount'] = 0;
+        // foreach ($roles as $key=>$role) {
+        //     $data['data']['staff'][$key] = [
+        //         'name' => $role->name,
+        //         'users' => $role->users->pluck('username', 'id'),
+        //         'count' => $role->users->count()
+        //     ];
+        //     $data['data']['staffCount'] += $role->users->count();
+        // }
+        // $data['success'] = true;
         return \response()->json($data, 200);
     }
 
