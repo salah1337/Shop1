@@ -154,6 +154,7 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
             Route::post('/assign', 'StaffController@assign');
             Route::get('/show/{id}', 'StaffController@show');
             Route::post('/revoke', 'StaffController@revoke');
+            Route::get('/fire/{id}', 'StaffController@fire');
         });
         
         Route::prefix('/roles')->group( function(){

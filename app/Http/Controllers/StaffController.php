@@ -139,4 +139,35 @@ class StaffController extends Controller
         ];
         return \response()->json($data, 400);
     }
+
+    public function fire($id){
+        $user = User::find($id) ?? User::where('username', $id)->first();
+        if( !$user ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'user not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        if ( $user && $user->roles->count() > 0 ){
+            \DB::table('role_user')->where('user_id', $user->id)->delete();
+            $data = [
+                'success' => true,
+                'data' => [
+                    'message' => $user->username.' no longer has any roles.'
+                ]
+            ];
+            return \response()->json($data, 200);
+        }
+        $data = [
+            'success' => false,
+                'data' =>  [
+                    'message' => 'user is not a staff member',
+                    'user' => $user,
+                ]
+        ];
+        return \response()->json($data, 400);
+    }
 }
