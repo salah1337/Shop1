@@ -154,10 +154,15 @@ class ProductController extends Controller
         }
         $images = json_decode($request->get('images'));
         // $imgFiles = json_decode($request->images);
-        // return \response()->json($request->images, 500);
-
+        
         $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
-        $imageNames = \explode(",", $request->get('image'));
+
+        $imageNamesRaw = $request->get('image');
+        if ( $request->get('image') != ''){
+            $imageNames = \explode(",", $request->get('image'));
+        }else{
+            $imageNames = [];
+        }
         // $imageNames = json_decode($request->get('image'));
         // return \response()->json($imageNames, 500);
         foreach ($images as $key => $image) {
