@@ -173,10 +173,10 @@ class ProductController extends Controller
         $request->thumb->storeAs('public', $thumbnailName);
         
         foreach ($images as $key => $image) {
-            $request->images[$key]->storeAs('public', $imageNames[$key]);
+            $request->images[$key]->storeAs('public', time().'_'.$request->images[$key]->getClientOriginalName());
         }
         $product->update([
-            'name' => $request->get('name'), 
+            'name' => $request->get('name'),
             'location' => $request->get('location'), 
             'SKU' => $request->get('SKU'), 
             'price' => $request->get('price'), 
@@ -226,6 +226,30 @@ class ProductController extends Controller
             'success' => true,
             'data' =>  [
                 'message' => 'product deleted',
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+
+    public function toggleStatus($id)
+    {
+        $product = Product::find($id);
+        if( !$product ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $product->update([
+            'live' => $product->live == 1 ? 0 : 1
+        ]);
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product updated',
             ]
         ];
         return \response()->json($data, 200);
