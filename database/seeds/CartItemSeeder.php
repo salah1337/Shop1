@@ -24,7 +24,10 @@ class CartItemSeeder extends Seeder
                 'name' => $product->name,
                 'count' => $count,
                 'price' => $product->price,
-                'options' => 'kek'
+                'tax' => $product->tax,
+                'options' => 'kek',
+                'image' => $product->thumb,
+                'description' => $product->cartDesc
             ]);
             $cart->update([
                'total' => $item->price * $item->count

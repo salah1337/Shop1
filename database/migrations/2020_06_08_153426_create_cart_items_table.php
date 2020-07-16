@@ -18,8 +18,11 @@ class CreateCartItemsTable extends Migration
             $table->timestamps();
 
             $table->string('name');
+            $table->string('image');
             $table->longText('options');
+            $table->longText('description');
             $table->integer('count');
+            $table->integer('tax');
             $table->float('price');
             $table->bigInteger('cart_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();

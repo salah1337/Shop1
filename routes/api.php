@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
         Route::post('/update/{id}', 'ProductController@update'); // admin manager
         Route::get('/delete/{id}', 'ProductController@destroy'); // admin manager
         Route::get('/togglestatus/{id}', 'ProductController@togglestatus'); // admin manager
+        Route::get('/feature/{id}', 'ProductController@toggleFeature'); // admin manager
     
         Route::prefix('/category')->group( function(){
             Route::get('/', 'ProductCategoryController@index'); // admin manager user guest 

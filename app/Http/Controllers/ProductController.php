@@ -88,6 +88,7 @@ class ProductController extends Controller
             'thumb' => $thumbnailName, 
             'image' => json_encode($imageNames), 
             'stock' => $request->get('stock'), 
+            'tax' => $request->get('tax'), 
             'live' => $request->get('live'), 
             'unlimited' => $request->get('unlimited'), 
             'product_category_id' => $request->get('product_category_id'), 
@@ -258,6 +259,31 @@ class ProductController extends Controller
         }
         $product->update([
             'live' => $product->live == 1 ? 0 : 1
+        ]);
+        $data = [
+            'success' => true,
+            'data' =>  [
+                'message' => 'product updated',
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+
+    public function toggleFeature($id)
+    {
+        $product = Product::find($id);
+        if( !$product ){
+            $data = [
+                'success' => false,
+                'data' =>  [
+                    'message' => 'product not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        
+        $product->update([
+            'featured' => $product->featured == 1 ? 0 : 1
         ]);
         $data = [
             'success' => true,

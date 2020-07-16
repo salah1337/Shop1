@@ -22,6 +22,7 @@ $factory->define(Product::class, function (Faker $faker) {
         'SKU' => $name[0].$name[1].'/'.$categoryName[0].$categoryName[1],
         'name' => $name,
         'price' => rand(5, 1000),
+        'tax' => rand(5, 100),
         'weight' => rand(5, 5000),
         'cartDesc' => $faker->text($maxNbChars = 15),
         'shortDesc' => $faker->text($maxNbChars = 100),

@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('SKU');
             $table->string('name');
             $table->float('price');
+            $table->float('tax');
             $table->float('weight');
             $table->string('cartDesc');
             $table->string('shortDesc');

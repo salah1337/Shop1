@@ -26,22 +26,13 @@ class CartController extends Controller
 
     public function cart(Request $request){
         $cart =  $request->user()->cart;
-        $items = $cart->items;
-        foreach ($items as $key => $item) {
-            $product = Product::find($item->product_id);
-            if ($product && $product->live) {
-                $item['description'] = $product->cartDesc;
-                $item['image'] = $product->thumb;
-                $item['tax'] = $product->tax;
-            }
-        }
         $data = [
             'success' => true,
             'data' => [
                 'cart' => [
                     'count' => $cart->items->count(),
                     'total' => $cart->total,
-                    'items' => $items,
+                    'items' => $cart->items,
                 ]
             ]
         ];
@@ -98,9 +89,12 @@ class CartController extends Controller
                         'name' => $product->name,
                         'count' => 1,
                         'price' => $product->price,
+                        'tax' => $product->tax,
                         'options' => $request->get('options'),
                         'product_id' => $product->id,
-                        'cart_id' => $cart->id
+                        'cart_id' => $cart->id,
+                        'image' => $product->thumb,
+                        'description' => $product->cartDesc,
                 ]);
             }
             $cart = $this->updateCartTotal($cart->id);

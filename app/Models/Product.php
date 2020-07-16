@@ -13,6 +13,7 @@ class Product extends Model
         'SKU',
         'name',
         'price',
+        'tax',
         'weight',
         'cartDesc',
         'shortDesc',
