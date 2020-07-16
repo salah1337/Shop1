@@ -29,7 +29,7 @@ class CartController extends Controller
         $items = $cart->items;
         foreach ($items as $key => $item) {
             $product = Product::find($item->product_id);
-            if ($product) {
+            if ($product && $product->live) {
                 $item['description'] = $product->cartDesc;
                 $item['image'] = $product->thumb;
                 $item['tax'] = $product->tax;
@@ -71,25 +71,36 @@ class CartController extends Controller
     }
 
     public function Add(Request $request, $id){
-        // find prod & check if exists & live
+        // find prod & check if exists & liv
+
         $product = Product::find($id);
         if( $product && $product->live ){
             // get cart & check if car has prod
+            if (!$request->get('options')){
+                $data = [
+                    'success' => false,
+                    'data' => [
+                        'message' => 'please specify options'
+                    ]
+                ];
+                return \response()->json($data, 200);
+            }
             $cart =  $request->user()->cart;
             if ( $cart->has($product) ){
                 // if cart has prod increment count
                 $cartItem = $cart->items->where('product_id', $product->id)->first();
                 $cartItem->update([
                     'count' => $cartItem->count + 1,
-                ]);
-            }else{
-                // if cart doens't have prod add it
-                CartItem::create([
-                    'name' => $product->name,
-                    'count' => 1,
-                    'price' => $product->price,
-                    'product_id' => $product->id,
-                    'cart_id' => $cart->id
+                    ]);
+                }else{
+                    // if cart doens't have prod add it
+                    CartItem::create([
+                        'name' => $product->name,
+                        'count' => 1,
+                        'price' => $product->price,
+                        'options' => $request->get('options'),
+                        'product_id' => $product->id,
+                        'cart_id' => $cart->id
                 ]);
             }
             $cart = $this->updateCartTotal($cart->id);

@@ -142,6 +142,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, $id)
     {
+        // return \response()->json($request, 500);
         $product = Product::find($id);
         if( !$product ){
             $data = [
@@ -155,8 +156,7 @@ class ProductController extends Controller
         $images = json_decode($request->get('images'));
         // $imgFiles = json_decode($request->images);
         
-        $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
-
+        
         $imageNamesRaw = $request->get('image');
         if ( $request->get('image') != ''){
             $imageNames = \explode(",", $request->get('image'));
@@ -164,33 +164,46 @@ class ProductController extends Controller
             $imageNames = [];
         }
         // $imageNames = json_decode($request->get('image'));
-        // return \response()->json($imageNames, 500);
         foreach ($images as $key => $image) {
             // $imageNames[$key] = time().'_'.$request->images[$key]->getClientOriginalName();
             \array_push($imageNames, time().'_'.$request->images[$key]->getClientOriginalName());
         }
-
-        $request->thumb->storeAs('public', $thumbnailName);
+        
         
         foreach ($images as $key => $image) {
             $request->images[$key]->storeAs('public', time().'_'.$request->images[$key]->getClientOriginalName());
         }
         $product->update([
-            'name' => $request->get('name'),
-            'location' => $request->get('location'), 
-            'SKU' => $request->get('SKU'), 
-            'price' => $request->get('price'), 
-            'weight' => $request->get('weight'), 
-            'cartDesc' => $request->get('cartDesc'), 
-            'shortDesc' => $request->get('shortDesc'), 
-            'longDesc' => $request->get('longDesc'), 
-            'thumb' => $thumbnailName, 
-            'image' => json_encode($imageNames), 
-            'stock' => $request->get('stock'), 
-            'live' => $request->get('live'), 
-            'unlimited' => $request->get('unlimited'), 
-            'product_category_id' => $request->get('product_category_id'), 
+            'image' => \json_encode($imageNames), 
+            ]);
+        
+        if ($request->thumb){
+            $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
+            $request->thumb->storeAs('public', $thumbnailName);
+            $product->update([
+                'thumb' => $thumbnailName, 
+            ]);
+        }
+        
+        $product->update([
+            $request
         ]);
+        // $product->update([
+        //     'name' => $request->get('name'),
+        //     'location' => $request->get('location'), 
+        //     'SKU' => $request->get('SKU'), 
+        //     'price' => $request->get('price'), 
+        //     'weight' => $request->get('weight'), 
+        //     'cartDesc' => $request->get('cartDesc'), 
+        //     'shortDesc' => $request->get('shortDesc'), 
+        //     'longDesc' => $request->get('longDesc'), 
+        //     'thumb' => $thumbnailName, 
+        //     'image' => json_encode($imageNames), 
+        //     'stock' => $request->get('stock'), 
+        //     'live' => $request->get('live'), 
+        //     'unlimited' => $request->get('unlimited'), 
+        //     'product_category_id' => $request->get('product_category_id'), 
+        // ]);
         $product['category'] = ProductCategory::find($product->product_category_id);
         $product['options'] = $product->options;
         $data = [

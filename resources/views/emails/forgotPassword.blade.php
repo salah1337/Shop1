@@ -1,18 +1,20 @@
 @component('mail::message')
-# Introduction
-
+# Password Reset
+Hi,
 Click the button below to change your password.
-{{$token}}
 
-<a href='http://localhost:6969/reset/{{$token}}'>
-    @component('mail::button', ['url' => ''])
+<div>
+    @component('mail::button', ['url' => 'http://localhost:3000/reset/{{$token}}'])
         Reset Password
     @endcomponent
+</div>
+
+<br>
+or click this 
+<a href='http://localhost:3000/reset/{{$token}}'>
+    link
 </a>
-or click this link
-<a href='http://localhost:6969/reset/{{$token}}'>
-    http://localhost:6969/reset/{{$token}}
-</a>
+<br>
 Thanks,<br>
 {{ config('app.name') }}
 @endcomponent

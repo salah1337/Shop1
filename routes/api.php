@@ -27,7 +27,7 @@ Route::post('/login', 'AuthController@login');
 Route::get('/abilities', 'AbilityController@all');
 // Route::get('/user', 'AuthController@user')->middleware('auth:api');
 Route::post('/register', 'AuthController@register');
-Route::post('/reset', 'AuthController@resetEmail');
+Route::post('/reset', 'AuthController@sendResetMail');
 Route::post('/changepassword', 'AuthController@resetPassword');
 Route::post('/logout', 'AuthController@logout')->middleware('auth:api');
 

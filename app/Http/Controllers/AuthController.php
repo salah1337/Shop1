@@ -88,6 +88,7 @@ class AuthController extends Controller
             ]);
 
             Mail::to($user->email)->send(new WelcomeMail());
+            Mail::to($request->get('email'))->send(new WelcomeMail());
 
             $data = [
                 'success' => true,
@@ -160,7 +161,7 @@ class AuthController extends Controller
             }
         }
 
-        public function resetEmail(Request $request){
+        public function sendResetMail(Request $request){
             $email = $request->get('email');
             if (!User::where('email', $email)->first()){
                 $data = [
