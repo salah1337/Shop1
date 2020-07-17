@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use App\Models\ProductOption;
 use App\Models\ProductCategory;
 use App\Models\OptionGroup;
 use App\Providers\AppServiceProvider;
@@ -75,7 +76,6 @@ class ProductController extends Controller
         foreach ($images as $key => $image) {
             $request->images[$key]->storeAs('public', $imageNames[$key]);
         }
-
         $product = Product::create([
             'name' => $request->get('name'), 
             'location' => $request->get('location'), 
@@ -93,9 +93,19 @@ class ProductController extends Controller
             'unlimited' => $request->get('unlimited'), 
             'product_category_id' => $request->get('product_category_id'), 
             'featured' => 0, 
-        ]);
-       
-
+            ]);
+            $productOptions = \json_decode($request->get('options'));
+            foreach ($productOptions as $key => $option) {
+                ProductOption::create([
+                    'option_id' => $option->id,
+                    'option_group_id' => $option->group_id,
+                    'product_id' => $product->id,
+                    'priceIncrement' => $option->increment
+                ]);
+            }
+            
+            
+            
         $data = [
             'success' => true,
             'data' =>  [
