@@ -93,14 +93,75 @@ class AdminController extends Controller
         return \response()->json($data, 200);
     }
     public function addOption(Request $request){
-        $option = ProductOption::create([
+        $option = Option::create([
             'name' => $request->get('name'),
-            'group' => $request->get('group')
+            'option_group_id' => $request->get('group')
         ]);
         $data = [
             'success' => true, 
             'data' => [
                 'message' => 'option added'
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+    public function removeOption($id){
+        $option = Option::find($id);
+        if (!$option) {
+            $data = [
+                'success' => true, 
+                'data' => [
+                    'message' => 'option not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $option->delete();
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'option deleted'
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+    public function addOptionGroup(Request $request){
+        $option = OptionGroup::create([
+            'name' => $request->get('name'),
+        ]);
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'option group added'
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+    public function removeOptionGroup($id){
+        $group = OptionGroup::find($id);
+        if (!$group) {
+            $data = [
+                'success' => true, 
+                'data' => [
+                    'message' => 'option group not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        if (Option::where('option_group_id', $group->id)->first()){
+            $data = [
+                'success' => true, 
+                'data' => [
+                    'message' => 'can not delete group if not empty'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $group->delete();
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'option group deleted'
             ]
         ];
         return \response()->json($data, 200);
