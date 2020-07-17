@@ -92,6 +92,49 @@ class AdminController extends Controller
         ];
         return \response()->json($data, 200);
     }
+    public function UpdateCategory(Request $request, $id){
+        $category = ProductCategory::find($id);
+        if (!$category) {
+            $data = [
+                'success' => false, 
+                'data' => [
+                    'message' => 'category not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $category->update([
+            'name' => $request->get('name'),
+            'icon' => $request->get('icon')
+        ]);
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'category updated'
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+    public function removeCategory($id){
+        $category = ProductCategory::find($id);
+        if (!$category) {
+            $data = [
+                'success' => false, 
+                'data' => [
+                    'message' => 'category not found'
+                ]
+            ];
+            return \response()->json($data, 404);
+        }
+        $category->delete();
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'category deleted'
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
     public function addOption(Request $request){
         $option = Option::create([
             'name' => $request->get('name'),

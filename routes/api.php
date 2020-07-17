@@ -150,6 +150,8 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
             Route::get('/all', 'AdminController@products');
             Route::get('/show/{id}', 'AdminController@product');
             Route::post('/category/add', 'AdminController@addCategory');
+            Route::post('/category/update/{id}', 'AdminController@updateCategory');
+            Route::get('/category/remove/{id}', 'AdminController@removeCategory');
             Route::post('/option/add', 'AdminController@addOption');
             Route::get('/option/remove/{id}', 'AdminController@removeOption');
             Route::post('/option/group/add', 'AdminController@addOptionGroup');
