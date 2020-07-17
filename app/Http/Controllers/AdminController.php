@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Role;
 use App\Ability;
 use App\Models\Product;
+use App\Models\Option;
+use App\Models\OptionGroup;
 use App\Models\ProductCategory;
 use App\Models\ProductOption;
 use App\Models\Order;
@@ -31,11 +33,17 @@ class AdminController extends Controller
             $product['category'] = ProductCategory::find($product->product_category_id);
             $product['options'] = $product->options;
         }
+        $options = Option::all();
+        foreach ($options as $key => $option) {
+            $option['group'] = OptionGroup::find($option->option_group_id);
+        }
         $data = [
             'success' => true,
             'data' =>  [
                 'count' => $products->count(),
                 'categories' => ProductCategory::all(),
+                'options' => $options,
+                'optionGroups' => OptionGroup::all(),
                 'products' => $products
             ]
         ];
@@ -67,6 +75,32 @@ class AdminController extends Controller
             'data' => [
                 'count' => $orders->count(),
                 'orders' => $orders
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+    public function addCategory(Request $request){
+        $category = ProductCategory::create([
+            'name' => $request->get('name'),
+            'icon' => $request->get('icon')
+        ]);
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'category added'
+            ]
+        ];
+        return \response()->json($data, 200);
+    }
+    public function addOption(Request $request){
+        $option = ProductOption::create([
+            'name' => $request->get('name'),
+            'group' => $request->get('group')
+        ]);
+        $data = [
+            'success' => true, 
+            'data' => [
+                'message' => 'option added'
             ]
         ];
         return \response()->json($data, 200);

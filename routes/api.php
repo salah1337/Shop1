@@ -149,6 +149,8 @@ Route::group(['middleware' => ['auth:api', 'staff']], function() {
         Route::prefix('/product')->group( function(){
             Route::get('/all', 'AdminController@products');
             Route::get('/show/{id}', 'AdminController@product');
+            Route::post('/category/add', 'AdminController@addCategory');
+            Route::post('/option/add', 'AdminController@addOption');
         });
         
         Route::prefix('/staff')->group( function(){
