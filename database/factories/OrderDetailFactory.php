@@ -23,6 +23,7 @@ $factory->define(OrderDetail::class, function (Faker $faker) {
         'price' => $product->price * $quantity,
         'quantity' => $quantity,
         'order_id' => $order->id,
+        'options' => 'kek',
         'product_id' => $product->id
     ];
 });

@@ -127,6 +127,7 @@ class ClientController extends Controller
                 'price' => $detail['price'],
                 'quantity' => $detail['count'],
                 'product_id' => $detail['product_id'],
+                'options' => \json_encode($detail['options']),
                 'order_id' => $order['id'],
             ]);
             $orderDetails[$key] = $orderDetail;

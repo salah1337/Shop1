@@ -67,6 +67,7 @@ class OrderController extends Controller
                 'price' => $detail['price'],
                 'quantity' => $detail['quantity'],
                 'product_id' => $detail['product_id'],
+                'options' => \json_encode($detail['options']),
                 'order_id' => $order['id'],
             ]);
             $orderDetails[$key] = $orderDetail;

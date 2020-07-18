@@ -19,6 +19,7 @@ class CreateOrderDetailsTable extends Migration
 
             $table->string('name');
             $table->string('SKU');
+            $table->longText('options');
             $table->float('price');
             $table->integer('quantity');
             $table->bigInteger('product_id')->unsigned();
