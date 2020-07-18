@@ -26,8 +26,14 @@ class ProductController extends Controller
             $product['category'] = ProductCategory::find($product->product_category_id);
             $product['options'] = $product->options;
             foreach ($product['options'] as $key => $option) {
-                $option['name'] = $option->option->name;
-                $option['group'] = OptionGroup::find($option->option_group_id);
+                if (!$option->option) {
+                    $option['name'] = 'filler';
+                    $option['group'] = 1;
+                }else{
+
+                    $option['name'] = $option->option->name;
+                    $option['group'] = OptionGroup::find($option->option_group_id);
+                }
             }
         }
         $data = [

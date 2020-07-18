@@ -159,6 +159,7 @@ class AdminController extends Controller
             ];
             return \response()->json($data, 404);
         }
+        ProductOption::where('option_id', $option->id)->delete();
         $option->delete();
         $data = [
             'success' => true, 
