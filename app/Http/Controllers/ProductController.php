@@ -69,7 +69,7 @@ class ProductController extends Controller
 
         $images = json_decode($request->get('images'));
         // $imgFiles = json_decode($request->images);
-        // return \response()->json($request->images, 500);
+        // return \response()->json($request, 500);
 
         $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
         $imageNames = [];
@@ -142,6 +142,16 @@ class ProductController extends Controller
         }
         $product['category'] = ProductCategory::find($product->product_category_id);
         $product['options'] = $product->options;
+        foreach ($product['options'] as $key => $option) {
+            if (!$option->option) {
+                $option['name'] = 'filler';
+                $option['group'] = 1;
+            }else{
+
+                $option['name'] = $option->option->name;
+                $option['group'] = OptionGroup::find($option->option_group_id);
+            }
+        }
         $data = [
             'success' => true,
             'data' =>  [
@@ -202,34 +212,41 @@ class ProductController extends Controller
             ]);
         }
         
-        $product->update([
-            $request
-        ]);
-        // $product->update([
-        //     'name' => $request->get('name'),
-        //     'location' => $request->get('location'), 
-        //     'SKU' => $request->get('SKU'), 
-        //     'price' => $request->get('price'), 
-        //     'weight' => $request->get('weight'), 
-        //     'cartDesc' => $request->get('cartDesc'), 
-        //     'shortDesc' => $request->get('shortDesc'), 
-        //     'longDesc' => $request->get('longDesc'), 
-        //     'thumb' => $thumbnailName, 
-        //     'image' => json_encode($imageNames), 
-        //     'stock' => $request->get('stock'), 
-        //     'live' => $request->get('live'), 
-        //     'unlimited' => $request->get('unlimited'), 
-        //     'product_category_id' => $request->get('product_category_id'), 
-        // ]);
+        $product->update($request->except('image', 'options', 'thumb'));
+
         $product['category'] = ProductCategory::find($product->product_category_id);
-        $product['options'] = $product->options;
-        $data = [
-            'success' => true,
-            'data' =>  [
-                'message' => 'product updated',
-                'product' => $product
-            ]
-        ];
+        $oldOptionsById = $product->options->pluck('id');
+        $newOptions = \collect(\json_decode($request->get('options')));
+        $newOptionsById = $newOptions->pluck('id');
+        
+        
+        $optionsToAdd = $newOptionsById->diff($oldOptionsById);
+        foreach ($optionsToAdd as $key => $option) {
+            $newOption = $newOptions->where('id', $option)->first();
+            ProductOption::create([
+                'option_id' => $newOption->id,
+                'option_group_id' => $newOption->option_group_id,
+                'product_id' => $product->id,
+                'priceIncrement' => $newOption->increment
+                ]);
+            }
+            $optionsToDelete = $oldOptionsById->diff($newOptionsById);
+            
+            foreach ($optionsToDelete as $key => $option) {
+                ProductOption::find($option)->delete();
+            }
+            
+            $data = [
+                'success' => true,
+                'data' =>  [
+                    'message' => 'product updated',
+                    // 'productOptionsNew' => $newOptions,
+                    // 'productOptionsOld' => $oldOptions,
+                    // 'toDelete' => $optionsToDelete,
+                    // 'toAdd' => $optionsToAdd
+                    ]
+                ];
+                // return \response()->json(\gettype($request->all()), 500);
         return \response()->json($data, 200);
     }
 

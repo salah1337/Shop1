@@ -32,6 +32,16 @@ class AdminController extends Controller
         foreach ($products as $key => $product) {
             $product['category'] = ProductCategory::find($product->product_category_id);
             $product['options'] = $product->options;
+            foreach ($product['options'] as $key => $option) {
+                if (!$option->option) {
+                    $option['name'] = 'filler';
+                    $option['group'] = 1;
+                }else{
+
+                    $option['name'] = $option->option->name;
+                    $option['group'] = OptionGroup::find($option->option_group_id);
+                }
+            }
         }
         $options = Option::all();
         foreach ($options as $key => $option) {
