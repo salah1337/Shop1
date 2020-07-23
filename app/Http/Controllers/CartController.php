@@ -77,9 +77,9 @@ class CartController extends Controller
                 return \response()->json($data, 200);
             }
             $cart =  $request->user()->cart;
-            if ( $cart->has($product) ){
+            $cartItem = $cart->items->where(['product_id' => $product->id, 'options' => $request->get('options')])->first();
+            if ( $cartItem ){
                 // if cart has prod increment count
-                $cartItem = $cart->items->where('product_id', $product->id)->first();
                 $cartItem->update([
                     'count' => $cartItem->count + 1,
                     ]);

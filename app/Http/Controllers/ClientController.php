@@ -118,9 +118,6 @@ class ClientController extends Controller
         ]);
         foreach ($request->get('details') as $key => $detail) {
             $product = Product::find($detail['product_id']);
-            // foreach ($request->get('productOptions') as $key => $option) {
-                
-            // }
             $orderDetail = OrderDetail::create([
                 'name' => $product['name'],
                 'SKU' => $product['SKU'],
@@ -131,6 +128,7 @@ class ClientController extends Controller
                 'order_id' => $order['id'],
             ]);
             $orderDetails[$key] = $orderDetail;
+            CartItem::find($detail['id'])->delete();
         }
         $data = [
             'success' => true,
