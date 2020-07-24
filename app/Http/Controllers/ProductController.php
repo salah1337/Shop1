@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductOption;
 use App\Models\ProductCategory;
 use App\Models\OptionGroup;
+use App\Models\OrderDetail;
 use App\Providers\AppServiceProvider;
 
 class ProductController extends Controller
@@ -25,14 +26,35 @@ class ProductController extends Controller
         foreach ($products as $key => $product) {
             $product['category'] = ProductCategory::find($product->product_category_id);
             $product['options'] = $product->options;
+            $product['totalSales'] = 0;
+            $product['ordered'] = 0;
+            $product['shipped'] = 0;
+            $details = OrderDetail::where('product_id', $product->id)->get();
             foreach ($product['options'] as $key => $option) {
                 if (!$option->option) {
                     $option['name'] = 'filler';
                     $option['group'] = 1;
                 }else{
-
                     $option['name'] = $option->option->name;
                     $option['group'] = OptionGroup::find($option->option_group_id);
+                    $option['sold'] = 0;
+                    foreach ($details as $key => $detail) {
+                        if(\strlen($detail['options']) > 4 ){
+                        $detailOptions = \json_decode($detail['options']);
+                        foreach ($detailOptions as $key => $detailOption) {
+                            if ($detailOption->option_id == $option->option->id) {
+                                $option['sold'] +=$detail->quantity;
+                            }
+                        }                        
+                    }
+                    }
+                }
+            }
+            foreach ($details as $key => $detail) {
+                $product['totalSales'] += $detail->price;
+                $product['ordered'] += $detail->quantity;
+                if ($detail->order->shipped) {
+                    $product['shipped'] += $detail->quantity;
                 }
             }
         }
