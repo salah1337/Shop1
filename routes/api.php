@@ -40,6 +40,7 @@ Route::prefix('/customer')->group(function(){
     // Route::get('/products', 'ClientController@productsAll');
     // Route::get('/product/{id}', 'ClientController@productsOne');
     // Route::post('/products/{category}', 'ClientController@productsFilter');
+    Route::post('/user/update/{id}', 'AuthController@update')->middleware('auth:api');
 
     Route::group(['prefix' => 'product'], function(){
         Route::get('/all', 'ClientController@productsAll');

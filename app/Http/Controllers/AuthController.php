@@ -7,6 +7,7 @@ use Auth;
 use App\User;
 use App\Models\Cart;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -99,6 +100,37 @@ class AuthController extends Controller
             return response()->json($data);
         }
 
+        
+        public function update(UpdateUserRequest $request, $id)
+        {
+            $user = User::find($id);   
+            if( !$user ){
+                $data = [
+                    'success' => false,
+                    'data' =>  [
+                        'message' => 'user not found'
+                    ]
+                ];
+                return \response()->json($data, 404);
+            }
+            if ($request->image){
+                $imageName = time().'_'.$request->image->getClientOriginalName();
+                $request->image->storeAs('public', $imageName);
+                $user->update([
+                    'image' => $imageName 
+                ]);
+            }
+            $user->update($request->except('image'));
+            $data = [
+                'success' => true,
+                'data' =>  [
+                    'message' => 'user updated',
+                ]
+            ];
+            return \response()->json($data, 200);
+        }
+
+        
         public function logout(Request $request) {
 
             $request->user()->tokens->each(function ($token, $key) {
