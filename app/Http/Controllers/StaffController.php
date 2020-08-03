@@ -29,6 +29,7 @@ class StaffController extends Controller
         $data = [
             'success' => true,
             'data' => [
+                'count' => \sizeof($users),
                 'staffMembers' => $users,
             ]            
         ];
