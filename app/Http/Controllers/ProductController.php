@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductOption;
 use App\Models\ProductCategory;
 use App\Models\OptionGroup;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Providers\AppServiceProvider;
 
@@ -53,8 +54,10 @@ class ProductController extends Controller
             foreach ($details as $key => $detail) {
                 $product['totalSales'] += $detail->price;
                 $product['ordered'] += $detail->quantity;
-                if ($detail->order->shipped) {
-                    $product['shipped'] += $detail->quantity;
+                if (Order::find($detail->order_id)) {
+                    if (Order::find($detail->order_id)->shipped) {
+                        $product['shipped'] += $detail->quantity;
+                    }
                 }
             }
         }
