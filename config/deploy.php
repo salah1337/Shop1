@@ -13,13 +13,13 @@ return [
     |
     | Supported: 'basic', 'firstdeploy', 'local', 'pull'.
     |
-    */
-    'deploy_path' => '/home/emweosgr/source',
-    'user' => emweosgr,
-    'strategy' => 'firstdeploy',
-    'port' => 21098, // Port provided by cPanel ssh
-    'http_user' => emweosgr,
-    'writable_mode' => 'chmod',
+    // */
+    // 'deploy_path' => '/home/emweosgr/source',
+    // 'user' => emweosgr,
+    // 'strategy' => 'firstdeploy',
+    // 'port' => 21098, // Port provided by cPanel ssh
+    // 'http_user' => emweosgr,
+    // 'writable_mode' => 'chmod',
 
     'default' => 'basic',
 
