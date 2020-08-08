@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('/lol', function (Request $request) {
+// Route::post('/lol', function (Request $request) {
 
-        return $request;
-    });
+//         return $request;
+//     });
 
 Route::post('/login', 'AuthController@login');
 Route::get('/abilities', 'AbilityController@all');
