@@ -9,6 +9,7 @@ use App\Models\OptionGroup;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\CartItem;
+use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use App\User;
 use App\Http\Requests\StoreOrderRequest;
 
@@ -98,8 +99,16 @@ class ClientController extends Controller
     }
 
     public function orderPlace(StoreOrderRequest $request){
+        // return \response()->json($request->get('stripeToken')['id'], 500);
+        $charge = Stripe::charges()->create([
+            'amount' => $request->get('amount'),
+            'currency' => 'USD',
+            'source' => $request->get('stripeToken')['id'],
+            'description' => 'Order',
+            'receipt_email' => $request->get('email'),
+        ]);
         $order = Order::create([
-            'amount' => 1,
+            'amount' => $request->get('amount'),
             'shipName' => $request->get('shipName'),
             'shipAddress' => $request->get('shipAddress'),
             'shipAddress2' => $request->get('shipAddress2'),
