@@ -50,6 +50,17 @@ Route::prefix('/customer')->group(function(){
 
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('/user', 'AuthController@user');
+
+        Route::group(['prefix' => 'address'], function(){
+            Route::get('/all/{id}', 'AddressController@index');
+            Route::post('/add', 'AddressController@store');
+            Route::post('/update/{id}', 'AddressController@update');
+            Route::get('/delete/{id}', 'AddressController@destroy');
+            Route::get('/countries', 'AddressController@countries');
+            Route::get('/states/{country}', 'AddressController@states');
+            Route::get('/cities/{country}/{state}', 'AddressController@cities');
+        });
+        
         
         Route::get('/options/groups', 'ClientController@optiongroups');
 

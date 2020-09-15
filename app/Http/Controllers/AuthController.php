@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\User;
+use App\Address;
 use App\Models\Cart;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -148,6 +149,7 @@ class AuthController extends Controller
         public function user(Request $request){
             $cart =  $request->user()->cart;
             $orders =  $request->user()->orders;
+            $addresses =  $request->user()->addresses;
             foreach ($orders as $key => $order) {
                 $order['details'] = $order->details;
             }
@@ -164,6 +166,10 @@ class AuthController extends Controller
                         'orders' => [
                             'orders' => $orders,
                             'count' => $orders->count()  
+                        ],
+                        'addresses' => [
+                            'addresses' => $addresses,
+                            'count' => $addresses->count()  
                         ],
                         'isStaff' => $request->user()->roles->count() > 0 ? true :false,
                         'isAdmin' => $request->user()->isA('admin'),

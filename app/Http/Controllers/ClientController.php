@@ -11,6 +11,7 @@ use App\Models\OrderDetail;
 use App\Models\CartItem;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use App\User;
+use App\Address;
 use App\Http\Requests\StoreOrderRequest;
 
 class ClientController extends Controller
@@ -99,7 +100,10 @@ class ClientController extends Controller
     }
 
     public function orderPlace(StoreOrderRequest $request){
-        // return \response()->json($request->get('stripeToken')['id'], 500);
+        // return \response()->json($address, 500);
+        
+        $address = Address::find($request->get('addressId'));
+
         $charge = Stripe::charges()->create([
             'amount' => $request->get('amount'),
             'currency' => 'USD',
@@ -107,21 +111,21 @@ class ClientController extends Controller
             'description' => 'Order',
             'receipt_email' => $request->get('email'),
         ]);
+
         $order = Order::create([
             'amount' => $request->get('amount'),
-            'shipName' => $request->get('shipName'),
-            'shipAddress' => $request->get('shipAddress'),
-            'shipAddress2' => $request->get('shipAddress2'),
-            'city' => $request->get('city'),
-            'state' => $request->get('state'),
-            'zip' => $request->get('zip'),
-            'country' => $request->get('country'),
-            'phone' => $request->get('phone'),
-            'fax' => $request->get('fax'),
+            'shipName' => $address->firstName.' '.$address->lastName,
+            'shipAddress' => $address->address,
+            'shipAddress2' => $address->address2,
+            'city' => $address->city,
+            'state' => $address->state,
+            'zip' => $address->zip,
+            'country' => $address->country,
+            'phone' => $address->phone,
+            'fax' => $address->fax,
             'shipping' => $request->get('shipping'),
             'tax' => $request->get('tax'),
-            'email' => $request->get('email'),
-            'shipped' => $request->get('shipped'),
+            'email' => $request->user()->email,
             'trackingNumber' => 123,
             'user_id' => $request->user()->id,
         ]);

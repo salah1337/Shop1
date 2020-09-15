@@ -27,27 +27,16 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'shipName' => 'required|string|max:255',
-            'shipAddress' => 'required|string|max:255',
-            'shipAddress2' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'zip' => 'required|integer',
-            'country' => 'required|string|max:255',
-            'phone' => 'required|integer',
-            'fax' => 'required|integer',
             'shipping' => 'required|integer',
             'tax' => 'required|integer',
-            'email' => 'required|string|max:255',
-            'shipped' => 'required|boolean',
             'details' => 'required|array',
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'amount.required' => 'A amount is required',
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         'amount.required' => 'A amount is required',
+    //     ];
+    // }
 }
