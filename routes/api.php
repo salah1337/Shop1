@@ -23,7 +23,11 @@ use Illuminate\Support\Facades\Route;
 //         return $request;
 //     });
 
+Route::group(['middleware' => ['api','cors']], function () {
+    
+});
 Route::post('/login', 'AuthController@login');
+
 Route::get('/abilities', 'AbilityController@all');
 // Route::get('/user', 'AuthController@user')->middleware('auth:api');
 Route::post('/register', 'AuthController@register');
