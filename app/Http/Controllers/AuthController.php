@@ -116,9 +116,13 @@ class AuthController extends Controller
             }
             if ($request->image){
                 $imageName = time().'_'.$request->image->getClientOriginalName();
-                $request->image->storeAs('public', $imageName);
+                $result = $request->image->storeOnCloudinary();
+
+                //Here I get the url
+                $path = $result->getPath();
+ 
                 $user->update([
-                    'image' => $imageName 
+                    'image' => $path
                 ]);
             }
             $user->update($request->except('image'));

@@ -102,6 +102,7 @@ class ProductController extends Controller
             $imageNames[$key] = time().'_'.$request->images[$key]->getClientOriginalName();
         }
 
+        $request->$thumb->storeOnCloudinary();
         $request->thumb->storeAs('public', $thumbnailName);
         
         foreach ($images as $key => $image) {
