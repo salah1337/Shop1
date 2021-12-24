@@ -96,17 +96,22 @@ class ProductController extends Controller
         // $imgFiles = json_decode($request->images);
         // return \response()->json($request, 500);
 
-        $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
+        // $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
         $imageNames = [];
-        foreach ($images as $key => $image) {
-            $imageNames[$key] = time().'_'.$request->images[$key]->getClientOriginalName();
-        }
+        // foreach ($images as $key => $image) {
+        //     $imageNames[$key] = time().'_'.$request->images[$key]->getClientOriginalName();
+        // }
 
-        $request->$thumb->storeOnCloudinary();
-        $request->thumb->storeAs('public', $thumbnailName);
+        // $request->thumb->storeAs('public', $thumbnailName);
         
+        $result = $request->thumb->storeOnCloudinary();
+
+        $thumbPath = $result->getPath();
+
         foreach ($images as $key => $image) {
-            $request->images[$key]->storeAs('public', $imageNames[$key]);
+            $result_ = $request->images[$key]->storeOnCloudinary();
+            $imageNames[$key] = $result_->getPath();
+            // $request->images[$key]->storeAs('public', $imageNames[$key]);
         }
         $product = Product::create([
             'name' => $request->get('name'), 
@@ -117,7 +122,7 @@ class ProductController extends Controller
             'cartDesc' => $request->get('cartDesc'), 
             'shortDesc' => $request->get('shortDesc'), 
             'longDesc' => $request->get('longDesc'), 
-            'thumb' => $thumbnailName, 
+            'thumb' => $thumbPath, 
             'image' => json_encode($imageNames), 
             'stock' => $request->get('stock'), 
             'tax' => $request->get('tax'), 
