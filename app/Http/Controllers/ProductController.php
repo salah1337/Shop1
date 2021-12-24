@@ -104,6 +104,7 @@ class ProductController extends Controller
 
         // $request->thumb->storeAs('public', $thumbnailName);
         
+        
         $result = $request->thumb->storeOnCloudinary();
 
         $thumbPath = $result->getPath();
