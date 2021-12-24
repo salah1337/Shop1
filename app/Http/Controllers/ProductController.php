@@ -222,25 +222,33 @@ class ProductController extends Controller
         }else{
             $imageNames = [];
         }
-        // $imageNames = json_decode($request->get('image'));
-        foreach ($images as $key => $image) {
-            // $imageNames[$key] = time().'_'.$request->images[$key]->getClientOriginalName();
-            \array_push($imageNames, time().'_'.$request->images[$key]->getClientOriginalName());
-        }
+        // // $imageNames = json_decode($request->get('image'));
+        // foreach ($images as $key => $image) {
+        //     // $imageNames[$key] = time().'_'.$request->images[$key]->getClientOriginalName();
+        //     \array_push($imageNames, time().'_'.$request->images[$key]->getClientOriginalName());
+        // }
         
+
         
         foreach ($images as $key => $image) {
-            $request->images[$key]->storeAs('public', time().'_'.$request->images[$key]->getClientOriginalName());
+            $result_ = $request->images[$key]->storeOnCloudinary();
+            $imageNames[$key] = $result_->getPath();
+            // $request->images[$key]->storeAs('public', time().'_'.$request->images[$key]->getClientOriginalName());
         }
         $product->update([
             'image' => \json_encode($imageNames), 
             ]);
         
         if ($request->thumb){
-            $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
-            $request->thumb->storeAs('public', $thumbnailName);
+
+            $result = $request->thumb->storeOnCloudinary();
+
+            $thumbPath = $result->getPath();
+
+            // $thumbnailName = time().'_'.$request->thumb->getClientOriginalName();
+            // $request->thumb->storeAs('public', $thumbnailName);
             $product->update([
-                'thumb' => $thumbnailName, 
+                'thumb' => $thumbPath, 
             ]);
         }
         

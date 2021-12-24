@@ -1,0 +1,778 @@
+-- MariaDB dump 10.19  Distrib 10.5.10-MariaDB, for Linux (x86_64)
+--
+-- Host: localhost    Database: shopchop
+-- ------------------------------------------------------
+-- Server version	10.5.10-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `abilities`
+--
+
+DROP TABLE IF EXISTS `abilities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abilities` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `label` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `abilities_name_unique` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abilities`
+--
+
+LOCK TABLES `abilities` WRITE;
+/*!40000 ALTER TABLE `abilities` DISABLE KEYS */;
+INSERT INTO `abilities` VALUES (1,'store-optionGroup','create option groups',NULL,NULL),(2,'store-option','create options',NULL,NULL),(3,'store-orderDetail','create order details for existing orders',NULL,NULL),(4,'store-order','place orders',NULL,NULL),(5,'store-productCategory','create product categories',NULL,NULL),(6,'store-productOption','create product options',NULL,NULL),(7,'store-product','create products',NULL,NULL),(8,'store-user','create users',NULL,NULL),(9,'update-optionGroup','update option groups',NULL,NULL),(10,'update-option','update options',NULL,NULL),(11,'update-orderDetail','update order details for existing orders',NULL,NULL),(12,'update-productCategory','update product categories',NULL,NULL),(13,'update-productOption','update product options',NULL,NULL),(14,'update-product','update products',NULL,NULL),(15,'update-user','update users',NULL,NULL),(16,'delete-optionGroup','delete option groups',NULL,NULL),(17,'delete-option','delete options',NULL,NULL),(18,'delete-orderDetail','delete order details for existing orders',NULL,NULL),(19,'delete-order','cancel orders',NULL,NULL),(20,'delete-productCategory','delete product categories',NULL,NULL),(21,'delete-productOption','delete product options',NULL,NULL),(22,'delete-product','delete products',NULL,NULL),(23,'delete-user','delete users',NULL,NULL);
+/*!40000 ALTER TABLE `abilities` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ability_role`
+--
+
+DROP TABLE IF EXISTS `ability_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ability_role` (
+  `role_id` bigint(20) unsigned NOT NULL,
+  `ability_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`role_id`,`ability_id`),
+  KEY `ability_role_ability_id_foreign` (`ability_id`),
+  CONSTRAINT `ability_role_ability_id_foreign` FOREIGN KEY (`ability_id`) REFERENCES `abilities` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `ability_role_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ability_role`
+--
+
+LOCK TABLES `ability_role` WRITE;
+/*!40000 ALTER TABLE `ability_role` DISABLE KEYS */;
+INSERT INTO `ability_role` VALUES (2,4,NULL,NULL),(3,21,NULL,NULL),(4,8,NULL,NULL),(5,2,NULL,NULL),(6,12,NULL,NULL),(7,9,NULL,NULL),(8,17,NULL,NULL),(9,7,NULL,NULL);
+/*!40000 ALTER TABLE `ability_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `addresses`
+--
+
+DROP TABLE IF EXISTS `addresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `addresses` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `firstName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `zip` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fax` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address2` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `addresses_user_id_foreign` (`user_id`),
+  CONSTRAINT `addresses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `addresses`
+--
+
+LOCK TABLES `addresses` WRITE;
+/*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cart_items`
+--
+
+DROP TABLE IF EXISTS `cart_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cart_items` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `count` int(11) NOT NULL,
+  `tax` int(11) NOT NULL,
+  `price` double(8,2) NOT NULL,
+  `cart_id` bigint(20) unsigned NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cart_items_cart_id_foreign` (`cart_id`),
+  KEY `cart_items_product_id_foreign` (`product_id`),
+  CONSTRAINT `cart_items_cart_id_foreign` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cart_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cart_items`
+--
+
+LOCK TABLES `cart_items` WRITE;
+/*!40000 ALTER TABLE `cart_items` DISABLE KEYS */;
+INSERT INTO `cart_items` VALUES (1,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Perspiciatis.',1,16,633.00,1,1),(2,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Perspiciatis.',1,16,633.00,2,1),(3,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Perspiciatis.',3,16,633.00,3,1),(4,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Perspiciatis.',5,16,633.00,4,1),(5,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Rerum voluptas.',2,46,160.00,5,10),(6,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Rerum voluptas.',1,46,160.00,6,10),(7,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Rerum voluptas.',1,46,160.00,7,10),(8,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Perspiciatis.',5,16,633.00,8,1),(9,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Rerum voluptas.',1,46,160.00,9,10),(10,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Lenovo','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[{\"id\":3,\"created_at\":\"2020-09-08T16:56:39.000000Z\",\"updated_at\":\"2020-09-08T16:56:39.000000Z\",\"priceIncrement\":9,\"option_id\":7,\"option_group_id\":1,\"product_id\":3,\"name\":\"red\",\"group\":{\"id\":1,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"colors\"},\"option\":{\"id\":7,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"red\",\"option_group_id\":1}},{\"id\":18,\"created_at\":\"2020-09-08T16:56:40.000000Z\",\"updated_at\":\"2020-09-08T16:56:40.000000Z\",\"priceIncrement\":8,\"option_id\":2,\"option_group_id\":2,\"product_id\":3,\"name\":\"small\",\"group\":{\"id\":2,\"created_at\":null,\"updated_at\":null,\"deleted_at\":null,\"name\":\"sizes\"},\"option\":{\"id\":2,\"created_at\":\"2020-09-08T16:56:32.000000Z\",\"updated_at\":\"2020-09-08T16:56:32.000000Z\",\"deleted_at\":null,\"name\":\"small\",\"option_group_id\":2}}]','Rerum voluptas.',5,46,160.00,10,10);
+/*!40000 ALTER TABLE `cart_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `carts`
+--
+
+DROP TABLE IF EXISTS `carts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `carts` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `total` int(11) NOT NULL DEFAULT 0,
+  `user_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `carts_user_id_foreign` (`user_id`),
+  CONSTRAINT `carts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `carts`
+--
+
+LOCK TABLES `carts` WRITE;
+/*!40000 ALTER TABLE `carts` DISABLE KEYS */;
+INSERT INTO `carts` VALUES (1,'2021-12-24 03:47:06','2021-12-24 03:47:07',633,11),(2,'2021-12-24 03:47:06','2021-12-24 03:47:07',633,1),(3,'2021-12-24 03:47:06','2021-12-24 03:47:07',1899,2),(4,'2021-12-24 03:47:06','2021-12-24 03:47:07',3165,3),(5,'2021-12-24 03:47:07','2021-12-24 03:47:07',320,4),(6,'2021-12-24 03:47:07','2021-12-24 03:47:07',160,5),(7,'2021-12-24 03:47:07','2021-12-24 03:47:07',160,6),(8,'2021-12-24 03:47:07','2021-12-24 03:47:07',3165,7),(9,'2021-12-24 03:47:07','2021-12-24 03:47:07',160,8),(10,'2021-12-24 03:47:07','2021-12-24 03:47:07',800,9),(11,'2021-12-24 03:47:07','2021-12-24 03:47:07',0,10);
+/*!40000 ALTER TABLE `carts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cities`
+--
+
+DROP TABLE IF EXISTS `cities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cities` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cities`
+--
+
+LOCK TABLES `cities` WRITE;
+/*!40000 ALTER TABLE `cities` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cities` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `failed_jobs`
+--
+
+DROP TABLE IF EXISTS `failed_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `failed_jobs`
+--
+
+LOCK TABLES `failed_jobs` WRITE;
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `migrations`
+--
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2016_06_01_000001_create_oauth_auth_codes_table',1),(4,'2016_06_01_000002_create_oauth_access_tokens_table',1),(5,'2016_06_01_000003_create_oauth_refresh_tokens_table',1),(6,'2016_06_01_000004_create_oauth_clients_table',1),(7,'2016_06_01_000005_create_oauth_personal_access_clients_table',1),(8,'2019_08_19_000000_create_failed_jobs_table',1),(9,'2020_05_28_190232_create_orders_table',1),(10,'2020_05_28_190751_create_product_categories_table',1),(11,'2020_05_28_190832_create_option_groups_table',1),(12,'2020_05_28_190833_create_products_table',1),(13,'2020_05_28_190834_create_options_table',1),(14,'2020_05_28_190835_create_order_details_table',1),(15,'2020_05_28_190836_create_product_options_table',1),(16,'2020_06_01_234055_create_roles_table',1),(17,'2020_06_01_234211_create_abilities_table',1),(18,'2020_06_01_234544_ability_role',1),(19,'2020_06_01_234902_role_user',1),(20,'2020_06_07_211245_create_carts_table',1),(21,'2020_06_08_153426_create_cart_items_table',1),(22,'2020_09_04_225940_create_addresses_table',1),(23,'2020_09_11_203933_create_cities_table',1);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `oauth_access_tokens`
+--
+
+DROP TABLE IF EXISTS `oauth_access_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_access_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `client_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_access_tokens_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oauth_access_tokens`
+--
+
+LOCK TABLES `oauth_access_tokens` WRITE;
+/*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth_access_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `oauth_auth_codes`
+--
+
+DROP TABLE IF EXISTS `oauth_auth_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_auth_codes` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `client_id` bigint(20) unsigned NOT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_auth_codes_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oauth_auth_codes`
+--
+
+LOCK TABLES `oauth_auth_codes` WRITE;
+/*!40000 ALTER TABLE `oauth_auth_codes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth_auth_codes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `oauth_clients`
+--
+
+DROP TABLE IF EXISTS `oauth_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_clients` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `provider` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `redirect` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `personal_access_client` tinyint(1) NOT NULL,
+  `password_client` tinyint(1) NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_clients_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oauth_clients`
+--
+
+LOCK TABLES `oauth_clients` WRITE;
+/*!40000 ALTER TABLE `oauth_clients` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth_clients` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `oauth_personal_access_clients`
+--
+
+DROP TABLE IF EXISTS `oauth_personal_access_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_personal_access_clients` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `client_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oauth_personal_access_clients`
+--
+
+LOCK TABLES `oauth_personal_access_clients` WRITE;
+/*!40000 ALTER TABLE `oauth_personal_access_clients` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth_personal_access_clients` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `oauth_refresh_tokens`
+--
+
+DROP TABLE IF EXISTS `oauth_refresh_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_refresh_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `access_token_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oauth_refresh_tokens`
+--
+
+LOCK TABLES `oauth_refresh_tokens` WRITE;
+/*!40000 ALTER TABLE `oauth_refresh_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth_refresh_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `option_groups`
+--
+
+DROP TABLE IF EXISTS `option_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `option_groups` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `option_groups`
+--
+
+LOCK TABLES `option_groups` WRITE;
+/*!40000 ALTER TABLE `option_groups` DISABLE KEYS */;
+INSERT INTO `option_groups` VALUES (1,NULL,NULL,NULL,'colors'),(2,NULL,NULL,NULL,'sizes'),(3,NULL,NULL,NULL,'models');
+/*!40000 ALTER TABLE `option_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `options`
+--
+
+DROP TABLE IF EXISTS `options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `options` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `option_group_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `options_option_group_id_foreign` (`option_group_id`),
+  CONSTRAINT `options_option_group_id_foreign` FOREIGN KEY (`option_group_id`) REFERENCES `option_groups` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `options`
+--
+
+LOCK TABLES `options` WRITE;
+/*!40000 ALTER TABLE `options` DISABLE KEYS */;
+INSERT INTO `options` VALUES (1,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'blue',1),(2,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'x20',3),(3,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'x420',3),(4,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'x20',3),(5,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'large',2),(6,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'green',1),(7,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'x420',3),(8,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'medium',2),(9,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'green',1);
+/*!40000 ALTER TABLE `options` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_details`
+--
+
+DROP TABLE IF EXISTS `order_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_details` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `SKU` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double(8,2) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
+  `order_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_details_product_id_foreign` (`product_id`),
+  KEY `order_details_order_id_foreign` (`order_id`),
+  CONSTRAINT `order_details_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `order_details_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_details`
+--
+
+LOCK TABLES `order_details` WRITE;
+/*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
+INSERT INTO `order_details` VALUES (1,'2021-12-24 03:47:07','2021-12-24 03:47:07','emmerich.irma\'s Lenovo orderDetails','Le/La','kek',5064.00,8,1,2),(2,'2021-12-24 03:47:07','2021-12-24 03:47:07','viola.ziemann\'s Accer orderDetails','Ac/La','kek',1065.00,3,5,5),(3,'2021-12-24 03:47:07','2021-12-24 03:47:07','isawayn\'s Accer orderDetails','Ac/La','kek',710.00,2,5,4),(4,'2021-12-24 03:47:07','2021-12-24 03:47:07','emmerich.irma\'s socks orderDetails','so/T-','kek',1860.00,5,6,2),(5,'2021-12-24 03:47:07','2021-12-24 03:47:07','dooley.dimitri\'s Lenovo orderDetails','Le/La','kek',1440.00,9,10,1),(6,'2021-12-24 03:47:07','2021-12-24 03:47:07','isawayn\'s Lenovo orderDetails','Le/La','kek',1942.00,2,3,4),(7,'2021-12-24 03:47:07','2021-12-24 03:47:07','athena14\'s Jeep orderDetails','Je/Ca','kek',9480.00,10,4,9),(8,'2021-12-24 03:47:07','2021-12-24 03:47:07','viola.ziemann\'s socks orderDetails','so/T-','kek',479.00,1,2,5),(9,'2021-12-24 03:47:07','2021-12-24 03:47:07','lorena62\'s Lenovo orderDetails','Le/La','kek',3798.00,6,1,3),(10,'2021-12-24 03:47:07','2021-12-24 03:47:07','athena14\'s socks orderDetails','so/T-','kek',3353.00,7,2,9),(11,'2021-12-24 03:47:07','2021-12-24 03:47:07','lorena62\'s Accer orderDetails','Ac/La','kek',355.00,1,5,3),(12,'2021-12-24 03:47:07','2021-12-24 03:47:07','viola.ziemann\'s socks orderDetails','so/T-','kek',1437.00,3,2,5),(13,'2021-12-24 03:47:07','2021-12-24 03:47:07','isawayn\'s socks orderDetails','so/T-','kek',5646.00,6,7,4),(14,'2021-12-24 03:47:07','2021-12-24 03:47:07','isawayn\'s Accer orderDetails','Ac/La','kek',3550.00,10,5,4),(15,'2021-12-24 03:47:07','2021-12-24 03:47:07','dooley.dimitri\'s socks orderDetails','so/T-','kek',9410.00,10,7,1),(16,'2021-12-24 03:47:07','2021-12-24 03:47:07','viola.ziemann\'s Lenovo orderDetails','Le/La','kek',3884.00,4,3,5),(17,'2021-12-24 03:47:07','2021-12-24 03:47:07','1337\'s Lenovo orderDetails','Le/La','kek',4431.00,7,1,7),(18,'2021-12-24 03:47:07','2021-12-24 03:47:07','isawayn\'s Accer orderDetails','Ac/La','kek',451.00,1,8,4),(19,'2021-12-24 03:47:07','2021-12-24 03:47:07','athena14\'s Jeep orderDetails','Je/Ca','kek',8532.00,9,4,9),(20,'2021-12-24 03:47:07','2021-12-24 03:47:07','emmerich.irma\'s Lenovo orderDetails','Le/La','kek',971.00,1,3,2),(21,'2021-12-24 03:47:07','2021-12-24 03:47:07','athena14\'s Lenovo orderDetails','Le/La','kek',971.00,1,3,6),(22,'2021-12-24 03:47:07','2021-12-24 03:47:07','viola.ziemann\'s socks orderDetails','so/T-','kek',2604.00,7,6,5),(23,'2021-12-24 03:47:07','2021-12-24 03:47:07','athena14\'s socks orderDetails','so/T-','kek',3348.00,9,6,6),(24,'2021-12-24 03:47:07','2021-12-24 03:47:07','dooley.dimitri\'s Accer orderDetails','Ac/La','kek',451.00,1,8,1),(25,'2021-12-24 03:47:07','2021-12-24 03:47:07','lorena62\'s socks orderDetails','so/T-','kek',2395.00,5,2,3),(26,'2021-12-24 03:47:07','2021-12-24 03:47:07','athena14\'s Lenovo orderDetails','Le/La','kek',1440.00,9,10,8),(27,'2021-12-24 03:47:07','2021-12-24 03:47:07','1337\'s socks orderDetails','so/T-','kek',2823.00,3,7,7),(28,'2021-12-24 03:47:07','2021-12-24 03:47:07','dooley.dimitri\'s Lenovo orderDetails','Le/La','kek',1440.00,9,10,1),(29,'2021-12-24 03:47:07','2021-12-24 03:47:07','emmerich.irma\'s Lenovo orderDetails','Le/La','kek',320.00,2,10,10),(30,'2021-12-24 03:47:07','2021-12-24 03:47:07','emmerich.irma\'s socks orderDetails','so/T-','kek',7528.00,8,7,2);
+/*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orders` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `amount` double(8,2) NOT NULL,
+  `shipName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipAddress` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipAddress2` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `zip` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fax` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping` double(8,2) NOT NULL,
+  `tax` double(8,2) NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipped` tinyint(1) NOT NULL DEFAULT 0,
+  `trackingNumber` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `orders_user_id_foreign` (`user_id`),
+  CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (1,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,716.00,'Rafaela Smith','96635 Mario Loop Suite 990\nCasperport, VA 95825-8603','147 Ruecker Club\nConnellyhaven, MA 83116-2046','Wardside','Delaware','94169-6001','Dominica','(800) 356-7595','02685-0393',15.00,11.00,'lesch.mara@example.org',0,'sR0J0EsKH3',7),(2,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,535.00,'Jevon Grant','851 Wilderman Plaza Suite 018\nBruenborough, FL 24343','886 Heidenreich Gardens\nNorth Alvismouth, WV 26032','Port Breannafort','North Carolina','78898-9002','Bhutan','1-877-309-6167','90601-5197',8.00,17.00,'steuber.bettye@example.org',1,'cn8bTrXCYS',10),(3,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,708.00,'Brett Kemmer','348 Samanta Passage\nKendrickhaven, CA 13973-8166','568 Alessia Burg Apt. 955\nNorth Mallorymouth, OK 37233','North Colt','Nebraska','59143','Nicaragua','844.814.4278','93268-3407',25.00,1.00,'bcollier@example.com',0,'5xisxyE986',6),(4,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,142.00,'Margot Kutch','510 Pfeffer Isle Suite 368\nPort Belleton, DE 22095','814 Vernice Wells Suite 809\nNew Jaime, HI 05491','East Emmie','Washington','35117','Sierra Leone','1-888-527-6782','61371-8261',14.00,13.00,'crystal42@example.com',0,'TaAndBytAx',3),(5,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,760.00,'Alda Prosacco','106 Padberg Falls\nNew Arturoton, DC 08770','4807 Davonte Route\nNew Rozella, WY 75130','Port Constance','North Dakota','66475-9706','Cuba','855.998.2463','68985-3333',5.00,23.00,'lhirthe@example.com',1,'C9YzrlFb4G',5),(6,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,733.00,'Gia Marvin','21599 Reichel Alley\nEast Nehaborough, AZ 17365','446 Williamson Avenue\nLake Nora, KY 37012-6223','Luettgenfurt','Colorado','48263-1706','Brunei Darussalam','(855) 691-8316','09218-9024',9.00,13.00,'jarrett45@example.net',1,'NnnWegP8jD',1),(7,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,467.00,'admin admin','7770 Price Camp Apt. 164\nPort Haroldbury, PA 63878','18978 Pfannerstill Drive Apt. 542\nIsaiahtown, NC 87505-2420','Lake Jakechester','New Jersey','48911-3844','Cuba','877.384.3732','39183-9751',20.00,1.00,'69@1337.com',1,'AsOYbWkLBQ',11),(8,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,315.00,'Gia Marvin','209 Ashlynn Trail\nRockyton, CO 60170','45859 Kihn Forge\nEast Albertchester, NE 91149-0409','South Murielchester','Massachusetts','11055-1924','Zambia','844.260.7301','48907-7489',0.00,0.00,'jarrett45@example.net',1,'8ScGwVpeaE',1),(9,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,996.00,'Gia Marvin','6580 Wisoky Plaza\nMrazville, WA 68293-4282','967 Ratke Corners Apt. 870\nNorth Karley, CO 41195','East Sheilastad','Colorado','86948-2563','Montenegro','(877) 292-2575','99307-4620',23.00,21.00,'jarrett45@example.net',1,'is23RnGPLY',1),(10,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,388.00,'Jevon Grant','225 Eden Lock Suite 742\nGibsonport, NJ 24477','77861 Doyle Viaduct Suite 363\nLedaberg, MN 63548','Shaniashire','New Jersey','47200','Cote d\'Ivoire','866-531-9939','12516-6186',10.00,12.00,'steuber.bettye@example.org',0,'8K84Or1jtH',10);
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `password_resets`
+--
+
+DROP TABLE IF EXISTS `password_resets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `password_resets` (
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+LOCK TABLES `password_resets` WRITE;
+/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product_categories`
+--
+
+DROP TABLE IF EXISTS `product_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product_categories` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `icon` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_categories`
+--
+
+LOCK TABLES `product_categories` WRITE;
+/*!40000 ALTER TABLE `product_categories` DISABLE KEYS */;
+INSERT INTO `product_categories` VALUES (1,NULL,NULL,'T-shirts','portrait'),(2,NULL,NULL,'Cars','portrait'),(3,NULL,NULL,'Laptops','portrait');
+/*!40000 ALTER TABLE `product_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product_options`
+--
+
+DROP TABLE IF EXISTS `product_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product_options` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `priceIncrement` double(8,2) NOT NULL,
+  `option_id` bigint(20) unsigned NOT NULL,
+  `option_group_id` bigint(20) unsigned NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_options_option_id_foreign` (`option_id`),
+  KEY `product_options_option_group_id_foreign` (`option_group_id`),
+  KEY `product_options_product_id_foreign` (`product_id`),
+  CONSTRAINT `product_options_option_group_id_foreign` FOREIGN KEY (`option_group_id`) REFERENCES `option_groups` (`id`),
+  CONSTRAINT `product_options_option_id_foreign` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`),
+  CONSTRAINT `product_options_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_options`
+--
+
+LOCK TABLES `product_options` WRITE;
+/*!40000 ALTER TABLE `product_options` DISABLE KEYS */;
+INSERT INTO `product_options` VALUES (1,'2021-12-24 03:47:07','2021-12-24 03:47:07',14.00,6,1,3),(2,'2021-12-24 03:47:07','2021-12-24 03:47:07',8.00,1,1,2),(3,'2021-12-24 03:47:07','2021-12-24 03:47:07',2.00,4,3,9),(4,'2021-12-24 03:47:07','2021-12-24 03:47:07',20.00,5,2,8),(5,'2021-12-24 03:47:07','2021-12-24 03:47:07',23.00,6,1,1),(6,'2021-12-24 03:47:07','2021-12-24 03:47:07',6.00,7,3,5),(7,'2021-12-24 03:47:07','2021-12-24 03:47:07',23.00,6,1,7),(8,'2021-12-24 03:47:07','2021-12-24 03:47:07',22.00,5,2,3),(9,'2021-12-24 03:47:07','2021-12-24 03:47:07',5.00,4,3,8),(10,'2021-12-24 03:47:07','2021-12-24 03:47:07',18.00,8,2,6),(11,'2021-12-24 03:47:07','2021-12-24 03:47:07',11.00,6,1,6),(12,'2021-12-24 03:47:07','2021-12-24 03:47:07',11.00,8,2,5),(13,'2021-12-24 03:47:07','2021-12-24 03:47:07',10.00,3,3,4),(14,'2021-12-24 03:47:07','2021-12-24 03:47:07',12.00,9,1,10),(15,'2021-12-24 03:47:07','2021-12-24 03:47:07',3.00,5,2,1),(16,'2021-12-24 03:47:07','2021-12-24 03:47:07',13.00,7,3,3),(17,'2021-12-24 03:47:07','2021-12-24 03:47:07',24.00,6,1,4),(18,'2021-12-24 03:47:07','2021-12-24 03:47:07',16.00,3,3,8),(19,'2021-12-24 03:47:07','2021-12-24 03:47:07',9.00,3,3,5),(20,'2021-12-24 03:47:07','2021-12-24 03:47:07',23.00,4,3,6),(21,'2021-12-24 03:47:07','2021-12-24 03:47:07',20.00,3,3,2),(22,'2021-12-24 03:47:07','2021-12-24 03:47:07',5.00,7,3,2),(23,'2021-12-24 03:47:07','2021-12-24 03:47:07',16.00,6,1,6),(24,'2021-12-24 03:47:07','2021-12-24 03:47:07',19.00,6,1,3),(25,'2021-12-24 03:47:07','2021-12-24 03:47:07',9.00,6,1,5),(26,'2021-12-24 03:47:07','2021-12-24 03:47:07',9.00,5,2,9),(27,'2021-12-24 03:47:07','2021-12-24 03:47:07',25.00,1,1,5),(28,'2021-12-24 03:47:07','2021-12-24 03:47:07',12.00,8,2,9),(29,'2021-12-24 03:47:07','2021-12-24 03:47:07',16.00,2,3,5),(30,'2021-12-24 03:47:07','2021-12-24 03:47:07',23.00,3,3,6);
+/*!40000 ALTER TABLE `product_options` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `products` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `SKU` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double(8,2) NOT NULL,
+  `tax` double(8,2) NOT NULL,
+  `weight` double(8,2) NOT NULL,
+  `cartDesc` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shortDesc` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `longDesc` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thumb` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stock` double(8,2) NOT NULL,
+  `live` tinyint(1) NOT NULL,
+  `unlimited` tinyint(1) NOT NULL,
+  `featured` tinyint(1) NOT NULL DEFAULT 0,
+  `product_category_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `products_product_category_id_foreign` (`product_category_id`),
+  CONSTRAINT `products_product_category_id_foreign` FOREIGN KEY (`product_category_id`) REFERENCES `product_categories` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `products`
+--
+
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES (1,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Le/La','Lenovo',633.00,16.00,3364.00,'Perspiciatis.','In quia quaerat debitis quidem. Eum veniam ut et itaque quia. Ut excepturi quia temporibus.','Non voluptas incidunt occaecati magni. Adipisci amet sed aut aliquid modi. In quo omnis rem rerum. Magnam sed rerum quidem rerum voluptas nihil. Ea numquam consequatur et molestias expedita veniam. Magnam totam non ut odit sunt. Quo consectetur ut quod ex tempora laudantium. Debitis maiores molestias nemo perferendis eum ducimus. Consequatur saepe ut nihil rem dignissimos architecto.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','1349 Hodkiewicz Stream Suite 175',89.00,1,0,0,3),(2,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'so/T-','socks',479.00,68.00,4183.00,'Incidunt est.','Incidunt suscipit et hic voluptatem deleniti qui ut. Molestiae ut ut officia nostrum iusto non sit.','Omnis aspernatur sint rerum voluptatem enim consequuntur laborum. Reiciendis qui praesentium officiis voluptas aspernatur et delectus blanditiis. Minus voluptatibus deleniti rem minima. Ipsum consequatur ab earum assumenda at voluptates dolorem. Velit omnis accusamus molestias voluptatibus est dolore. Labore exercitationem et nisi provident. Perferendis veritatis facere fuga eligendi eum iste.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','397 Lemke Run Apt. 538',338.00,0,1,0,1),(3,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Le/La','Lenovo',971.00,70.00,505.00,'Ea maxime.','Rem laborum dignissimos qui enim. Consequatur ratione nam blanditiis blanditiis.','Molestiae doloribus impedit et velit quidem id. Maxime ut est saepe dolorem voluptas ut voluptatem. Dolorem laborum mollitia molestiae fugiat ut corporis harum. Rem animi enim consequuntur et beatae. Odio dolore voluptatem quod molestiae dolorum. Reiciendis tempore rem repellendus. Omnis eos veniam at suscipit quibusdam est. Quas est ut quisquam voluptatem autem fuga necessitatibus. Facilis consequatur corrupti a id sint et vero et. Quasi in iste ut tempora sint eum atque.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','9964 Aurelia Rue Suite 797',63.00,1,1,0,3),(4,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Je/Ca','Jeep',948.00,26.00,4004.00,'Est ullam aut.','Sit et ipsum unde illum dolorem. Quae non adipisci vel voluptatum.','Laboriosam voluptatum hic natus. Vel eligendi iure quae et. Quisquam quidem eos et laborum aut. At corporis et enim ut recusandae facere. Iste eveniet laborum adipisci eveniet quis sit. Ut excepturi atque sint non. Ullam recusandae ipsum nobis. Commodi est quis quis fugiat cumque. Assumenda maxime et ipsa reiciendis. Consequatur cum possimus ipsam expedita.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','65305 Krajcik Estate',373.00,0,1,0,2),(5,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Ac/La','Accer',355.00,99.00,4826.00,'Nobis sed quo.','Laudantium cumque laudantium atque ipsum qui ipsam. Deleniti nobis id aut sunt ad qui inventore.','Quasi incidunt commodi expedita nesciunt repellat necessitatibus quia. Voluptatibus cumque nobis voluptatum iure ut nam voluptatem. Officia maiores quos porro reiciendis. Voluptas repudiandae est consequatur odit blanditiis. Qui quo ut aut autem. Explicabo dolores accusantium aperiam consectetur eum iste.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','191 Elias Gateway',304.00,0,0,0,3),(6,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'so/T-','socks',372.00,21.00,2420.00,'Ipsa.','Eum consequuntur sequi qui et qui. Dolore ut suscipit nostrum dolores explicabo.','Non minima est assumenda cupiditate consequuntur officiis. Veritatis occaecati mollitia qui. Qui labore voluptatem porro quidem eius tempore sapiente. Quas voluptatibus molestiae sunt et sed. Quo quo eius eius et officia dolorem quia officiis. Non libero occaecati dolores quaerat. Nobis officiis sit qui asperiores accusamus. Eos aut enim quas exercitationem molestiae.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','6593 Alphonso Mall',110.00,0,0,0,1),(7,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'so/T-','socks',941.00,45.00,2027.00,'Quia.','Id sunt repudiandae in. Quia aliquam eos nihil. Quam dolor tempora iste provident.','Deserunt odit temporibus magni laboriosam perspiciatis et vel ut. Ipsum et non aut ut. Totam magni reprehenderit nobis nihil in ut. Dolor id ut aut dolorem provident ratione laborum magni. Ut aut ut et nihil. Molestiae beatae dolorum ipsam qui explicabo. Ullam iste qui reprehenderit cumque dicta est voluptas. Eos molestiae necessitatibus quis accusamus et unde. Eaque ea aperiam molestiae nesciunt vero tenetur maxime.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','5564 Omari Cove',127.00,0,0,0,1),(8,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Ac/La','Accer',451.00,20.00,2283.00,'Nesciunt quis.','Quos dicta doloremque ipsum aliquid soluta. Ratione dolore iure voluptas recusandae.','Sed sed et quia doloribus velit. Enim nesciunt dolores aut ipsa voluptates aut iure ex. Facere provident ex ipsa tempora animi eos omnis. Illo consequatur dolores sed commodi suscipit. Aliquid occaecati dolor tempore vel. Iure deleniti praesentium atque doloremque libero. Et labore dolorum quidem corrupti quae sint. Officia veniam quasi necessitatibus placeat. Perspiciatis sed ea quae id rerum hic. Et animi eveniet voluptatem dolores deserunt rerum.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','74801 Rachelle Junction',347.00,0,0,0,3),(9,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Le/La','Lenovo',171.00,62.00,2032.00,'Voluptatem.','Expedita velit id ut iure aliquid non voluptate. Repellat et hic sit et unde.','In sint dolorum eos sed aut. Sit sit explicabo voluptatem quos ex optio. Corporis aut consequatur accusamus deserunt deserunt. Cumque ut ad culpa tenetur non error ut. Laudantium quasi distinctio similique laborum. Et exercitationem in perferendis voluptatibus. Aut placeat qui quia ut voluptas amet. Eius dolorem omnis non cumque beatae quia temporibus. Mollitia iure dolorum omnis repellat facere. Rerum nobis est soluta rem aut. Sequi voluptas ex sapiente asperiores nostrum et.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','919 Mayer Tunnel Suite 781',367.00,0,0,0,3),(10,'2021-12-24 03:47:07','2021-12-24 03:47:07',NULL,'Le/La','Lenovo',160.00,46.00,342.00,'Rerum voluptas.','Est fugit distinctio quod quod. Est accusamus autem sed debitis similique.','Iusto earum deleniti repudiandae nihil porro et fugit. Omnis facilis autem veniam excepturi consequatur. Perspiciatis sint excepturi ut ipsam provident. Dolorum nihil sapiente laboriosam consequuntur ab vel veniam. Nemo placeat officiis omnis quia ut ut et quo. Et expedita et consequatur veritatis commodi perspiciatis. Id eveniet sit laborum omnis totam ut. Odit laudantium consequatur explicabo et magni quidem in. Suscipit est reprehenderit est dolorem nemo quasi id.','https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png','[\"https://res.cloudinary.com/kekster/image/upload/v1640321076/placeholder_grys0l.png\",\"https://res.cloudinary.com/kekster/image/upload/v1640321076/undraw_Placeholders_re_pvr4_fqgfri.png\"]','806 Rocio Manors',291.00,1,0,0,3);
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_user`
+--
+
+DROP TABLE IF EXISTS `role_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role_user` (
+  `role_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`role_id`),
+  KEY `role_user_role_id_foreign` (`role_id`),
+  CONSTRAINT `role_user_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `role_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_user`
+--
+
+LOCK TABLES `role_user` WRITE;
+/*!40000 ALTER TABLE `role_user` DISABLE KEYS */;
+INSERT INTO `role_user` VALUES (7,1,NULL,NULL),(5,5,NULL,NULL),(2,7,NULL,NULL),(9,7,NULL,NULL),(6,10,NULL,NULL),(1,11,NULL,NULL);
+/*!40000 ALTER TABLE `role_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roles` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `label` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_name_unique` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'admin','Admin','2021-12-24 03:47:06','2021-12-24 03:47:06'),(2,'general-manager','general Manager','2021-12-24 03:47:06','2021-12-24 03:47:06'),(3,'sales-manager','sales Manager','2021-12-24 03:47:06','2021-12-24 03:47:06'),(4,'option-manager','option Manager','2021-12-24 03:47:06','2021-12-24 03:47:06'),(5,'product-manager','product Manager','2021-12-24 03:47:06','2021-12-24 03:47:06'),(6,'user-manager','user Manager','2021-12-24 03:47:06','2021-12-24 03:47:06'),(7,'order-manager','order Manager','2021-12-24 03:47:06','2021-12-24 03:47:06'),(8,'sales-man','salesman','2021-12-24 03:47:06','2021-12-24 03:47:06'),(9,'employee','employee','2021-12-24 03:47:06','2021-12-24 03:47:06');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `firstName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `zip` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ip` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fax` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adress` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adress2` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_username_unique` (`username`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'athena14','jarrett45@example.net','Gia','Marvin','Miss','female','Port Annabelle','Alabama','49169','71.166.124.230','877-545-1695','38345-3727','Heard Island and McDonald Islands','80762 Zechariah Isle\nEast Lonieland, RI 43275-3367','133 Jones Mill Apt. 890\nLake Nova, MI 25437','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','PCbmmZLNcf','2021-12-24 03:47:06','2021-12-24 03:47:06'),(2,'rprohaska','bnienow@example.com','Fae','Durgan','Miss','female','North Elvieton','Iowa','23765-4705','239.59.96.134','844.785.6257','17890-2481','Kyrgyz Republic','39253 Oliver Lane\nSouth Jenifermouth, CT 86863-5340','33503 Verna Course\nMohrton, NJ 61005','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','lPIwdjVlEj','2021-12-24 03:47:06','2021-12-24 03:47:06'),(3,'isawayn','crystal42@example.com','Margot','Kutch','Dr.','female','Binsstad','Tennessee','21521-4946','33.162.153.100','(855) 387-5783','26924','Honduras','27945 Balistreri River Suite 916\nLake Alphonso, CA 13784','99467 Jovany Skyway\nWest Dejuanview, RI 14728','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','NVDwID17k7','2021-12-24 03:47:06','2021-12-24 03:47:06'),(4,'landen84','kade.abernathy@example.net','Jameson','Metz','Mr.','male','McClureside','North Dakota','47664','58.182.195.114','877-455-2561','51554','Macedonia','5631 Homenick Valleys\nOrtizmouth, NV 70694','708 Tiana Bypass Suite 453\nErinhaven, MO 29120-1474','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','e8R2WEC6Lk','2021-12-24 03:47:06','2021-12-24 03:47:06'),(5,'viola.ziemann','lhirthe@example.com','Alda','Prosacco','Mrs.','female','Bradyborough','New Hampshire','19198','29.48.98.153','1-866-516-1408','14423-8615','Mali','56316 Mann Keys\nNew Noah, GA 30641-7907','656 Schaefer Viaduct Suite 319\nSouth Reyhaven, IN 55971','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','gMjZQz2zj4','2021-12-24 03:47:06','2021-12-24 03:47:06'),(6,'lorena62','bcollier@example.com','Brett','Kemmer','Prof.','male','Merlestad','Illinois','27724','62.120.128.95','1-844-770-5631','07106','Pakistan','248 Marc Stream\nPort Jaidentown, CO 75291','70920 Konopelski Bridge\nNorth Bridie, NY 24299-6198','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','9R9WnVv03h','2021-12-24 03:47:06','2021-12-24 03:47:06'),(7,'dooley.dimitri','lesch.mara@example.org','Rafaela','Smith','Prof.','female','Lake Romainehaven','Alaska','16129','222.239.203.192','1-888-400-7787','86076','Marshall Islands','857 Mohammed Parks\nMarksfurt, MA 81801','769 Schultz Fields Suite 638\nRociofort, MI 80856-3139','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','dXJPCBzB0I','2021-12-24 03:47:06','2021-12-24 03:47:06'),(8,'elsa92','amanda51@example.org','Emily','Bartell','Mrs.','female','East Leraview','Georgia','57011-8621','64.163.60.2','855.476.7521','48316-8074','Bolivia','2405 Kuhn Stravenue\nWest Jaylon, DE 08442-2258','43471 Kertzmann Trail Suite 387\nNew Dwight, CO 94034','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','whN6rGAxJI','2021-12-24 03:47:06','2021-12-24 03:47:06'),(9,'vonrueden.easter','ndoyle@example.net','Margaretta','Lesch','Prof.','female','East Karlville','Mississippi','78389-3813','229.48.151.95','1-877-614-8556','62022','Saudi Arabia','404 Sarina Union Apt. 475\nGaylordhaven, ND 41718','8228 Hills View\nNew Rexborough, IA 91946-2621','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','2efExNMjVg','2021-12-24 03:47:06','2021-12-24 03:47:06'),(10,'emmerich.irma','steuber.bettye@example.org','Jevon','Grant','Prof.','male','Howeport','Utah','05230-0009','83.191.192.125','855-676-6945','01274-2500','Malaysia','4867 Shaniya Courts Suite 368\nDaphnehaven, MI 01450','13890 Auer Underpass Suite 766\nBrandyntown, UT 25477-2527','noimage.jpg','2021-12-24 03:47:06','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','soIrC7z81c','2021-12-24 03:47:06','2021-12-24 03:47:06'),(11,'1337','69@1337.com','admin','admin',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'$2y$10$T64fDv2w.3zgAd6K4N7bLeHX2IUerJAfwy5tliE7cveCG1j2ILuEK',NULL,'2021-12-24 03:47:06','2021-12-24 03:47:06');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2021-12-24  5:51:34
